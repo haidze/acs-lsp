@@ -1,0 +1,8 @@
+<odoo>
+    <!-- Tạo danh mục nhóm người dùng mới -->
+    <record id="module_category_acs_register" model="ir.module.category">
+        <field name="name">ACS Register</field>
+        <field name="description">Category for ACS Register Approver group</field>
+        <field name="sequence">10</field>
+    </record>
+</odoo>

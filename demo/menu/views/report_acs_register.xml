@@ -1,0 +1,197 @@
+<odoo>
+    <template id="report_acs_register">
+        <t t-call="web.basic_layout">
+            <main>
+                <t t-foreach="docs" t-as="doc">
+                    <!-- Trang 1 -->
+                    <div class="page">
+                        <style>
+                            .no-border-table {
+                                width: 100%;
+                                padding: 20px;
+                                border-collapse: collapse;
+                                border: 0;
+                            }
+                            .no-border-table td {
+                                border: 0;
+                            }
+                            .page-break {
+                                page-break-after: always;
+                            }
+                        </style>
+                        <table class="no-border-table">
+                            <tr>
+                                <td style="width: 25%;">
+                                    <img src="/menu/static/src/img/Logo_small_96.png" alt="SCGC Logo" style="width: 100px;"/>
+                                </td>
+                                <td style="width: 55%; text-align: center;">
+                                    <h3>VISITOR REGISTRATION FORM</h3>
+                                    <h3>PHIẾU ĐĂNG KÝ KHÁCH VÀO NHÀ MÁY</h3>
+                                </td>
+                                <td style="width: 20%; text-align: right;">
+                                    <img src="/path/to/qrcode.png" alt="QR Code" style="width: 100px;"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <div style="background-color: #f2f2f2; padding: 30px; margin-top: 20px;">
+                            <strong>Instruction (Hướng dẫn):</strong>
+                        </div>
+                        <table class="table" style="width: 100%; font-family: 'DejaVu Sans'; margin-top: 25px;">
+                            <tr>
+                                <th colspan="2" style="background-color: #17c653;">SECTION 1: APPLICANT DETAILS (THÔNG TIN NGƯỜI NỘP ĐƠN)</th>
+                            </tr>
+                            <tr>
+                                <td>Full Name (Họ và tên):</td>
+                                <td t-esc="doc.visitor_name"/>
+                            </tr>
+                            <tr>
+                                <td>Vietnamese ID / Passport Number (Số CCCD / Hộ chiếu):</td>
+                                <td t-esc="doc.visitor_id"/>
+                            </tr>
+                            <tr>
+                                <td>Job Title (Chức vụ):</td>
+                                <td t-esc="doc.job_position"/>
+                            </tr>
+                            <tr>
+                                <td>Section (Bộ phận):</td>
+                                <td t-esc="doc.department"/>
+                            </tr>
+                            <tr>
+                                <td>Contact Number (Số liên lạc):</td>
+                                <td t-esc="doc.phone"/>
+                            </tr>
+                            <tr>
+                                <td>Purpose of Visit (Mục đích vào nhà máy):</td>
+                                <td>
+                                    <t t-foreach="doc.purpose_of_visit" t-as="purpose">
+                                        <div><t t-esc="purpose.name"/></div>
+                                    </t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Required Access Area (Khu vực yêu cầu):</td>
+                                <td>
+                                    <t t-foreach="doc.required_working_areas" t-as="area">
+                                        <div><t t-esc="area.name"/></div>
+                                    </t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Gates (Cổng vào / ra):</td>
+                                <td>
+                                    <t t-foreach="doc.gates" t-as="gate">
+                                        <div><t t-esc="gate.name"/></div>
+                                    </t>
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="table" style="width: 100%; font-family: 'DejaVu Sans';">
+                            <tr>
+                                <th colspan="2" style="background-color: #17c653;">SECTION 2: DAY &amp; TIME OF VISIT (THỜI GIAN ĐĂNG KÝ)</th>
+                            </tr>
+                            <tr>
+                                <td>Date Applied (Ngày nộp đơn):</td>
+                                <td t-esc="doc.date_applied"/>
+                            </tr>
+                            <tr>
+                                <td>Time of Visit (Thời gian vào):</td>
+                                <td>
+                                    <t t-esc="doc.start_date"/> - <t t-esc="doc.end_date"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Time of Visit (Thời gian vào):</td>
+                                <td>
+                                    <t t-esc="doc.start_time"/> - <t t-esc="doc.end_time"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="table" style="width: 100%; font-family: 'DejaVu Sans';">
+                            <tr>
+                                <th colspan="2" style="background-color: #17c653;">SECTION 3: APPLICANT'S DECLARATION (CAM ĐOAN CỦA NGƯỜI NỘP ĐƠN)</th>
+                            </tr>
+                            <tr>
+                                <td colspan="2">APPLICANT'S DECLARATION (CAM ĐOAN CỦA NGƯỜI NỘP ĐƠN)</td>
+                            </tr>
+                        </table>
+                        <div class="page-break"></div> <!-- Đánh dấu trang -->
+                    </div>
+                    <!-- Trang 2 -->
+                    <div class="page">
+                    <table class="table" style="width: 100%; font-family: 'DejaVu Sans';">
+                        <tr>
+                            <th colspan="8" style="background-color: #17c653;">
+                                SECTION 4: VEHICLE LIST (DANH SÁCH PHƯƠNG TIỆN ĐĂNG KÝ)
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>No.</th>
+                            <th>Vehicle Plate</th>
+                            <th>Vehicle Type</th>
+                            <th>Driver Name</th>
+                            <th>Driver ID</th>
+                            <th>Start time</th>
+                            <th>End time</th>
+                            <th>QR Code</th>
+                        </tr>
+                        <t t-foreach="doc.vehicle_ids" t-as="vehicle">
+                            <tr>
+                                <td><t t-esc="vehicle.id"/></td>
+                                <td><t t-esc="vehicle.vehicle_plate_number"/></td>
+                                <td><t t-esc="vehicle.vehicle_info"/></td>
+                                <td><t t-esc="vehicle.driver_name"/></td>
+                                <td><t t-esc="vehicle.driver_identity_card"/></td>
+                                <td><t t-esc="vehicle.start_time"/></td>
+                                <td><t t-esc="vehicle.end_time"/></td>
+                                <td>
+                                    <t t-if="vehicle.code">
+                                        <img t-att-src="'data:image/png;base64,' + vehicle.code.decode('utf-8')" alt="QR Code" style="width:100px; height:100px;"/>
+                                    </t>
+                                    <t t-else="">
+                                        No QR Code
+                                    </t>
+                                </td>
+
+                            </tr>
+                        </t>
+                    </table>
+                    <table class="table" style="width: 100%; font-family: 'DejaVu Sans';">
+                        <tr>
+                            <th colspan="7" style="background-color: #17c653;">
+                                SECTION 5: PERSONALS LIST (DANH SÁCH NHÂN SỰ ĐĂNG KÝ)
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>No.</th>
+                            <th>Full Name</th>
+                            <th>Vietnamese ID</th>
+                            <th>Company Name</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Vehicle Plate</th>
+                        </tr>
+                        <t t-foreach="doc.person_ids" t-as="person">
+                            <tr>
+                                <td><t t-esc="person.id"/></td>
+                                <td><t t-esc="person.person_name"/></td>
+                                <td><t t-esc="person.person_identity_card"/></td>
+                                <td><t t-esc="person.person_company"/></td>
+                                <td><t t-esc="person.person_phone"/></td>
+                                <td><t t-esc="person.person_email"/></td>
+                                <td><t t-esc="person.vehicle_plate_number"/></td>
+                            </tr>
+                        </t>
+                    </table>
+                    <table class="table" style="width: 100%; font-family: 'DejaVu Sans';">
+                        <tr>
+                            <th colspan="3" style="background-color: #17c653;">
+                                SECTION 6: APPROVAL (PHÊ DUYỆT)
+                            </th>
+                        </tr>
+                    </table>
+                    </div>
+                </t>
+            </main>
+        </t>
+    </template>
+</odoo>

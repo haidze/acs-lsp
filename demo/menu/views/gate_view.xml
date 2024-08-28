@@ -1,0 +1,45 @@
+<odoo>
+    <record id="view_gate_tree" model="ir.ui.view">
+        <field name="name">gate.tree</field>
+        <field name="model">gate</field>
+        <field name="arch" type="xml">
+            <tree string="Gates">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="company"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_gate_form" model="ir.ui.view">
+        <field name="name">gate.form</field>
+        <field name="model">gate</field>
+        <field name="arch" type="xml">
+            <form string="Gates">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="company"/>
+                        </group>
+                    </group>
+                    <group string="OTHER INFORMATION">
+                        <field name="note" widget="html"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_gate" model="ir.actions.act_window">
+        <field name="name">Gates</field>
+        <field name="res_model">gate</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first gate
+            </p>
+        </field>
+    </record>
+</odoo>

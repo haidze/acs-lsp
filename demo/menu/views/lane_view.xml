@@ -1,0 +1,49 @@
+<odoo>
+    <record id="view_lane_tree" model="ir.ui.view">
+        <field name="name">lane.tree</field>
+        <field name="model">lane</field>
+        <field name="arch" type="xml">
+            <tree string="Lanes">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="gate_id"/>
+                <field name="direction"/>
+                <field name="type"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_lane_form" model="ir.ui.view">
+        <field name="name">lane.form</field>
+        <field name="model">lane</field>
+        <field name="arch" type="xml">
+            <form string="Lane">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="gate_id"/>
+                            <field name="direction"/>
+                            <field name="type"/>
+                        </group>
+                    </group>
+                    <group string="OTHER INFORMATION">
+                        <field name="note" widget="html"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_lane" model="ir.actions.act_window">
+        <field name="name">Lanes</field>
+        <field name="res_model">lane</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first lane
+            </p>
+        </field>
+    </record>
+</odoo>

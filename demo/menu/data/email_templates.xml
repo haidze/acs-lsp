@@ -1,0 +1,400 @@
+<odoo>
+    <data>
+        <!-- Email Template for Waiting for Approval -->
+        <record id="email_template_waiting_for_approval" model="mail.template">
+            <field name="name">Waiting for Approval</field>
+            <field name="subject">ACS Register: Waiting for Approval</field>
+            <field name="model_id" ref="model_acs_register"/>
+            <field name="body_html">
+                <![CDATA[
+                    <table class="table" style="width: 100%; font-family: Arial, Helvetica, sans-serif;">
+                        <tr>
+                            <td><strong>Subject</strong></td>
+                            <td>[VISITOR REGISTER] THE REGISTRATION NUMBER <t t-esc="object.reg_no"/> FOR <t t-esc="object.vehicle_type_id.name"/></td>
+                        </tr>
+                    </table>
+                    <p>Dear sir/madam <t t-esc="ctx.get('recipient_name')"/></p>
+                    <table class="table" style="width: 100%; font-family: Arial, Helvetica, sans-serif;">
+                        <tr>
+                            <th colspan="2" style="background-color: #f0f0f0;">THE REGISTRATION NUMBER <t t-esc="object.reg_no"/> FOR <t t-esc="object.vehicle_type_id.name"/></th>
+                        </tr>
+                        <tr>
+                            <td><strong>Register User</strong></td>
+                            <td><t t-esc="object.register_user.name"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Register Date</strong></td>
+                            <td><t t-esc="object.register_date"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Visitor</strong></td>
+                            <td><t t-esc="object.visitor_name"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Company</strong></td>
+                            <td><t t-esc="object.company"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Purpose of Visit</strong></td>
+                            <td>
+                                <t t-foreach="object.purpose_of_visit" t-as="purpose">
+                                    <div><t t-esc="purpose.name"/></div>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Working Areas</strong></td>
+                            <td>
+                                <t t-foreach="object.required_working_areas" t-as="area">
+                                    <div><t t-esc="area.name"/></div>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Gates</strong></td>
+                            <td>
+                                <t t-foreach="object.gates" t-as="gate">
+                                    <div><t t-esc="gate.name"/></div>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Date of visit</strong></td>
+                            <td>
+                                <t t-esc="object.start_date"/> <t t-esc="object.start_time"/>  - <t t-esc="object.end_date"/> <t t-esc="object.end_time"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Note</strong></td>
+                            <td><t t-esc="object.note"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Status</strong></td>
+                            <td><t t-esc="object.state"/></td>
+                        </tr>
+                    </table>
+                    <p style="text-align: center;">
+                        <a t-att-href="object.get_record_link()" style="background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">Click here to see the details</a>
+                    </p>
+                ]]>
+            </field>
+        </record>
+
+        <!-- Email Template for Approved -->
+        <record id="email_template_approved" model="mail.template">
+            <field name="name">Approved</field>
+            <field name="subject">ACS Register: Approved</field>
+            <field name="model_id" ref="model_acs_register"/>
+            <field name="body_html">
+                <![CDATA[
+                    <table class="table" style="width: 100%; font-family: Arial, Helvetica, sans-serif;">
+                        <tr>
+                            <td><strong>Subject</strong></td>
+                            <td>[VISITOR REGISTER] THE REGISTRATION NUMBER <t t-esc="object.reg_no"/> FOR <t t-esc="object.vehicle_type_id.name"/></td>
+                        </tr>
+                    </table>
+                    <p>Dear sir/madam <t t-esc="ctx.get('recipient_name')"/></p>
+                    <table class="table" style="width: 100%; font-family: Arial, Helvetica, sans-serif;">
+                        <tr>
+                            <th colspan="2" style="background-color: #f0f0f0;">THE REGISTRATION NUMBER <t t-esc="object.reg_no"/> FOR <t t-esc="object.vehicle_type_id.name"/></th>
+                        </tr>
+                        <tr>
+                            <td><strong>Register User</strong></td>
+                            <td><t t-esc="object.register_user.name"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Register Date</strong></td>
+                            <td><t t-esc="object.register_date"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Visitor</strong></td>
+                            <td><t t-esc="object.visitor_name"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Company</strong></td>
+                            <td><t t-esc="object.company"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Purpose of Visit</strong></td>
+                            <td>
+                                <t t-foreach="object.purpose_of_visit" t-as="purpose">
+                                    <div><t t-esc="purpose.name"/></div>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Working Areas</strong></td>
+                            <td>
+                                <t t-foreach="object.required_working_areas" t-as="area">
+                                    <div><t t-esc="area.name"/></div>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Gates</strong></td>
+                            <td>
+                                <t t-foreach="object.gates" t-as="gate">
+                                    <div><t t-esc="gate.name"/></div>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Date of visit</strong></td>
+                            <td>
+                                <t t-esc="object.start_date"/> <t t-esc="object.start_time"/>  - <t t-esc="object.end_date"/> <t t-esc="object.end_time"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Note</strong></td>
+                            <td><t t-esc="object.note"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Status</strong></td>
+                            <td><t t-esc="object.state"/></td>
+                        </tr>
+                    </table>
+                ]]>
+            </field>
+        </record>
+
+        <!-- Email Template for Rejected -->
+        <record id="email_template_rejected" model="mail.template">
+            <field name="name">Rejected</field>
+            <field name="subject">ACS Register: Rejected</field>
+            <field name="model_id" ref="model_acs_register"/>
+            <field name="body_html">
+                <![CDATA[
+                    <table class="table" style="width: 100%; font-family: Arial, Helvetica, sans-serif;">
+                        <tr>
+                            <td><strong>Subject</strong></td>
+                            <td>[VISITOR REGISTER] THE REGISTRATION NUMBER <t t-esc="object.reg_no"/> FOR <t t-esc="object.vehicle_type_id.name"/></td>
+                        </tr>
+                    </table>
+                    <p>Dear sir/madam <t t-esc="ctx.get('recipient_name')"/></p>
+                    <table class="table" style="width: 100%; font-family: Arial, Helvetica, sans-serif;">
+                        <tr>
+                            <th colspan="2" style="background-color: #f0f0f0;">THE REGISTRATION NUMBER <t t-esc="object.reg_no"/> FOR <t t-esc="object.vehicle_type_id.name"/></th>
+                        </tr>
+                        <tr>
+                            <td><strong>Register User</strong></td>
+                            <td><t t-esc="object.register_user.name"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Register Date</strong></td>
+                            <td><t t-esc="object.register_date"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Visitor</strong></td>
+                            <td><t t-esc="object.visitor_name"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Company</strong></td>
+                            <td><t t-esc="object.company"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Purpose of Visit</strong></td>
+                            <td>
+                                <t t-foreach="object.purpose_of_visit" t-as="purpose">
+                                    <div><t t-esc="purpose.name"/></div>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Working Areas</strong></td>
+                            <td>
+                                <t t-foreach="object.required_working_areas" t-as="area">
+                                    <div><t t-esc="area.name"/></div>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Gates</strong></td>
+                            <td>
+                                <t t-foreach="object.gates" t-as="gate">
+                                    <div><t t-esc="gate.name"/></div>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Date of visit</strong></td>
+                            <td>
+                                <t t-esc="object.start_date"/> <t t-esc="object.start_time"/>  - <t t-esc="object.end_date"/> <t t-esc="object.end_time"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Note</strong></td>
+                            <td><t t-esc="object.note"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Status</strong></td>
+                            <td><t t-esc="object.state"/></td>
+                        </tr>
+                    </table>
+                ]]>
+            </field>
+        </record>
+
+        <!-- Email Template for Terminated -->
+        <record id="email_template_terminated" model="mail.template">
+            <field name="name">Terminated</field>
+            <field name="subject">ACS Register: Terminated</field>
+            <field name="model_id" ref="model_acs_register"/>
+            <field name="body_html">
+                <![CDATA[
+                    <table class="table" style="width: 100%; font-family: Arial, Helvetica, sans-serif;">
+                        <tr>
+                            <td><strong>Subject</strong></td>
+                            <td>[VISITOR REGISTER] THE REGISTRATION NUMBER <t t-esc="object.reg_no"/> FOR <t t-esc="object.vehicle_type_id.name"/></td>
+                        </tr>
+                    </table>
+                    <p>Dear sir/madam <t t-esc="ctx.get('recipient_name')"/></p>
+                    <table class="table" style="width: 100%; font-family: Arial, Helvetica, sans-serif;">
+                        <tr>
+                            <th colspan="2" style="background-color: #f0f0f0;">THE REGISTRATION NUMBER <t t-esc="object.reg_no"/> FOR <t t-esc="object.vehicle_type_id.name"/></th>
+                        </tr>
+                        <tr>
+                            <td><strong>Register User</strong></td>
+                            <td><t t-esc="object.register_user.name"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Register Date</strong></td>
+                            <td><t t-esc="object.register_date"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Visitor</strong></td>
+                            <td><t t-esc="object.visitor_name"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Company</strong></td>
+                            <td><t t-esc="object.company"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Purpose of Visit</strong></td>
+                            <td>
+                                <t t-foreach="object.purpose_of_visit" t-as="purpose">
+                                    <div><t t-esc="purpose.name"/></div>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Working Areas</strong></td>
+                            <td>
+                                <t t-foreach="object.required_working_areas" t-as="area">
+                                    <div><t t-esc="area.name"/></div>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Gates</strong></td>
+                            <td>
+                                <t t-foreach="object.gates" t-as="gate">
+                                    <div><t t-esc="gate.name"/></div>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Date of visit</strong></td>
+                            <td>
+                                <t t-esc="object.start_date"/> <t t-esc="object.start_time"/>  - <t t-esc="object.end_date"/> <t t-esc="object.end_time"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Note</strong></td>
+                            <td><t t-esc="object.note"/></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Status</strong></td>
+                            <td><t t-esc="object.state"/></td>
+                        </tr>
+                    </table>
+                ]]>
+            </field>
+        </record>
+        <record id="email_template_security_notification" model="mail.template">
+            <field name="name">Security Notification - Visitor Registration</field>
+            <field name="model_id" ref="model_acs_register"/>
+            <field name="subject">No Reply: [ACCESS IN - OUT]</field>
+            <field name="body_html">
+                <![CDATA[
+                <table style="width: 100%; font-family: Arial, Helvetica, sans-serif; border-collapse: collapse;">
+                    <tr>
+                        <td style="background-color: #5bc0de; padding: 10px; text-align: left; color: white;">
+                            <strong>[VISUAL-CHECK] VISUAL CHECK THE VEHICLE - PLEASE CHECK VEHICLE PLATE</strong>
+                        </td>
+                    </tr>
+                </table>
+                <p>Dear Security,</p>
+                <table style="width: 100%; font-family: Arial, Helvetica, sans-serif; border-collapse: collapse;">
+                    <tr>
+                        <td style="background-color: #d9edf7; padding: 8px;"><strong>Register Number</strong></td>
+                        <td style="padding: 8px;"><t t-esc="object.reg_no"/></td>
+                    </tr>
+                    <tr>
+                        <td style="background-color: #d9edf7; padding: 8px;"><strong>Register Status</strong></td>
+                        <td style="background-color: #dff0d8; padding: 8px;"><t t-esc="object.state"/></td>
+                    </tr>
+                    <tr>
+                        <td style="background-color: #d9edf7; padding: 8px;"><strong>Company</strong></td>
+                        <td style="padding: 8px;"><t t-esc="object.company"/></td>
+                    </tr>
+                    <tr>
+                        <td style="background-color: #d9edf7; padding: 8px;"><strong>Purpose of Visit</strong></td>
+                        <td style="padding: 8px;">
+                            <t t-foreach="object.purpose_of_visit" t-as="purpose">
+                                <div><t t-esc="purpose.name"/></div>
+                            </t>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="background-color: #d9edf7; padding: 8px;"><strong>Working Areas</strong></td>
+                        <td style="padding: 8px;">
+                            <t t-foreach="object.required_working_areas" t-as="area">
+                                <div><t t-esc="area.name"/></div>
+                            </t>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="background-color: #d9edf7; padding: 8px;"><strong>Gates</strong></td>
+                        <td style="padding: 8px;">
+                            <t t-foreach="object.gates" t-as="gate">
+                                <div><t t-esc="gate.name"/></div>
+                            </t>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="background-color: #d9edf7; padding: 8px;"><strong>Date of Visit</strong></td>
+                        <td style="padding: 8px;">
+                            <t t-esc="object.start_date"/> <t t-esc="object.start_time"/> - <t t-esc="object.end_date"/> <t t-esc="object.end_time"/>
+                        </td>
+                    </tr>
+                    <tr t-if="object.vehicle_ids">
+                        <td style="background-color: #d9edf7; padding: 8px;"><strong>Vehicle Plate</strong></td>
+                        <td style="padding: 8px;">
+                            <t t-foreach="object.vehicle_ids" t-as="vehicle">
+                                <div><t t-esc="vehicle.vehicle_plate_number"/></div>
+                            </t>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="background-color: #d9edf7; padding: 8px;"><strong>Access Time</strong></td>
+                        <td style="padding: 8px;"><t t-esc="current_time"/></td>
+                    </tr>
+                    <tr>
+                        <td style="background-color: #d9edf7; padding: 8px;"><strong>Note</strong></td>
+                        <td style="padding: 8px;"><t t-esc="object.note"/></td>
+                    </tr>
+                </table>
+                <p style="text-align: center;">
+                    <a t-att-href="object.get_record_link()" style="background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">Click here to see the details</a>
+                </p>
+                <p>Best regards,</p>
+                <p>This email has been sent for notification purposes. Please do not reply to this message.</p>
+                <p>
+                    <img src="/menu/static/src/img/Logo_small_96.png" alt="SCGC Logo" style="width: 100px;"/>
+                    <br>A member of SCGC
+                </p>
+                ]]>
+            </field>
+        </record>
+    </data>
+</odoo>

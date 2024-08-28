@@ -1,0 +1,1865 @@
+<odoo>
+    <data>
+        <template id="control_in_out_template" name="Gate Interface">
+            <t t-call="web.layout">
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="header-top" style="display: flex; align-items: center; justify-content: space-between; padding: 10px; background-color: silver;">
+                                <div class="logo">
+                                    <img src="/menu/static/src/img/Logo_small_96.png" alt="Logo" style="height: 40px;"/>
+                                </div>
+                                <div class="nav-left" style="display: flex; align-items: center; color: white;">
+                                    <a href="/web" style="margin-right: 80px; margin-left: 100px; color: black; text-decoration: none;font-weight: bold;">Home</a>
+                                    <div class="dropdown">
+                                        <button class="dropbtn" style="background-color: transparent; border: none; color: black; cursor: pointer; font-weight: bold;" onclick="toggleSelectDropdown()">Select</button>
+                                        <div id="select-dropdown" class="dropdown-content" style="display: none; position: absolute; background-color: white; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                                            <a href="#" onclick="showLaneGroup('gate1')">Gate 01</a>
+                                            <a href="#" onclick="showLaneGroup('gate2')">Gate 02</a>
+                                            <a href="#" onclick="showLaneGroup('gate3')">Gate 03</a>
+                                            <a href="#" onclick="showLaneGroup('gate4')">Gate 04</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="header-title" style="flex-grow: 1; text-align: center; color: black;">
+                                    <span style="margin-right:130px;font-size: 20px; font-weight: bold;">CONTROL IN / OUT</span>
+                                </div>
+                                <div id="current-date-time" style="margin-right: 20px;"></div>
+                                <div style="position: relative;">
+                                    <!-- Icon chuông thông báo -->
+                                    <i id="notification-bell" class="fa fa-bell" style="margin-right: 20px; cursor: pointer;" onclick="toggleNotificationDropdown()"></i>
+
+                                    <!-- Dropdown thông báo -->
+                                    <div id="notification-dropdown" class="dropdown-content" style="display: none; position: absolute; top: 50px; right: 0; background-color: white; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1; width: 300px;">
+                                        <!-- Kiểm tra nếu có thông báo -->
+                                        <t t-if="notifications and notifications.length">
+                                            <t t-foreach="notifications" t-as="notification">
+                                                <div style="padding: 10px; border-bottom: 1px solid #eee;">
+                                                    <strong t-esc="notification.title" />
+                                                    <p t-esc="notification.message" style="margin: 0; color: #555;" />
+                                                    <span style="font-size: 0.8em; color: #888;" t-esc="notification.timestamp" />
+                                                </div>
+                                            </t>
+                                        </t>
+                                        <!-- Nếu không có thông báo -->
+                                        <t t-if="not notifications or len(notifications) == 0">
+                                            <div style="padding: 10px; text-align: center; color: #888;">No notifications</div>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="dropdown">
+                                    <img t-att-src="'/web/image/res.users/' + str(request.env.user.id) + '/image_1920'" alt="Avatar" class="img-avatar" style="height: 40px; border-radius: 50%; cursor: pointer;" onclick="toggleDropdown()"/>
+                                    <div id="dropdown-menu" class="dropdown-content" style="display: none; position: absolute; top: 50px; right: 0; background-color: white; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1;">
+                                        <a href="http://localhost:8069/my/home">
+                                            <i class="fa fa-user" style="margin-right: 10px;"></i>My Account
+                                        </a>
+                                        <a href="#" onclick="logout()">
+                                            <i class="fa fa-sign-out-alt" style="margin-right: 10px;"></i>Log out
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="lane-group-1" class="lane-group" style="display: none;">
+                                <div class="lane" onclick="toggleSingleDetail('lane-details-1')">
+                                    <div class="lane-info">
+                                        <div class="lane-details-box">
+                                            <span class="lane-icon"><i class="fa fa-car"></i></span>
+                                            <span class="lane-text">Lane 1</span>
+                                            <span class="lane-indicator">
+                                                <div class="arrow in">
+                                                    <div class="arrow-text in">IN</div>
+                                                    <div class="arrow-body in-body"></div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="lane-details-1" class="lane-details-content" style="display: none;">
+                                    <div class="lane-sections">
+                                        <div class="section vehicle-section">
+                                            <div class="main-vehicle">
+                                                <img id="main-vehicle-image" src="/menu/static/src/img/HX.jpg" alt="Main Vehicle Image" class="vehicle-image"/>
+                                            </div>
+                                            <div class="thumbnail-images">
+                                                <img src="/menu/static/src/img/HX.jpg" alt="Thumbnail 1" class="thumbnail-image" onclick="changeImage('/menu/static/src/img/HX.jpg')"/>
+                                                <img src="/menu/static/src/img/BX.jpg" alt="Thumbnail 2" class="thumbnail-image" onclick="changeImage('/menu/static/src/img/BX.jpg')"/>
+                                            </div>
+                                        </div>
+                                        <div class="section middle-section">
+                                            <div class="led-messages">
+                                                <div id="plate-label" class="led-button">LED MESSAGE 1</div>
+                                                <div id="status-label" class="led-button">LED MESSAGE 2</div>
+                                            </div>
+                                            <button class="manual-process" onclick="openModal()">Manual Process</button>
+                                        </div>
+                                        <div class="section activities-section">
+                                            <div class="activities-log">
+                                                <h2 class="activities-log-title">Activities Log</h2>
+                                                <div class="activities-log-content">
+                                                    <t t-foreach="request.env['control.in.out'].search([], order='record_date desc')" t-as="log">
+                                                        <!-- Hiển thị log chưa confirm -->
+                                                        <t t-if="log.status == '0'">
+                                                            <div class="activity-log-item"
+                                                                 t-att-data-vehicle-plate="log.vehicle_plate_number"
+                                                                 t-att-data-status-label="log.reason_label + ' - ' + (log.message_en or log.message_vn)"
+                                                                 onclick="onActivityLogClick(this)">
+                                                                <div class="activity-log-icon">
+                                                                    <i class="fa fa-exclamation-circle"></i>
+                                                                </div>
+                                                                <div class="activity-log-details">
+                                                                    <p>Plate: <t t-esc="log.vehicle_plate_number"/></p>
+                                                                    <p>Date: <t t-esc="log.record_date.strftime('%m/%d/%Y')"/></p>
+                                                                    <p>Reason: <t t-esc="log.reason_label"/> - <t t-esc="log.message_en or log.message_vn"/></p>
+                                                                </div>
+                                                                <div class="activity-log-status">
+                                                                    <span class="status-label" t-esc="log.status_label"/>
+                                                                    <button class="check-button" onclick="openModal()">→ Check</button>
+                                                                </div>
+                                                            </div>
+                                                        </t>
+                                                        <!-- Hiển thị log đã confirm -->
+                                                        <t t-if="log.status == '1'">
+                                                            <div class="activity-log-item" id="log-${log.id}"
+                                                                 t-att-data-vehicle-plate="log.vehicle_plate_number"
+                                                                 t-att-data-status-label="log.reason_label + ' - ' + (log.message_en or log.message_vn)"
+                                                                 onclick="onActivityLogClick(this)">
+                                                                <div class="activity-log-icon-green">
+                                                                    <i class="fa fa-bell"></i>
+                                                                </div>
+                                                                <div class="activity-log-details">
+                                                                    <p>Plate: <t t-esc="log.vehicle_plate_number"/></p>
+                                                                    <p>Date: <t t-esc="log.record_date.strftime('%m/%d/%Y %H:%M:%S')"/></p>
+                                                                    <p>Reason: <t t-esc="log.reason_label"/></p>
+                                                                </div>
+                                                                <div class="activity-log-status">
+                                                                    <span class="status-label"><t t-esc="log.status_label"/></span>
+                                                                </div>
+                                                            </div>
+                                                        </t>
+                                                    </t>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="lane" onclick="toggleSingleDetail('lane-details-2')">
+                                    <div class="lane-info">
+                                        <div class="lane-details-box">
+                                            <span class="lane-icon"><i class="fa fa-car"></i></span>
+                                            <span class="lane-text">Lane 2</span>
+                                            <span class="lane-indicator">
+                                                <div class="arrow out">
+                                                    <div class="arrow-text out">OUT</div>
+                                                    <div class="arrow-body out-body"></div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="lane-details-2" class="lane-details-content" style="display: none;">
+                                    <div class="lane-sections">
+                                        <div class="section vehicle-section">
+                                            <div class="main-vehicle">
+                                                <img id="main-vehicle-image" src="/menu/static/src/img/HX.jpg" alt="Main Vehicle Image" class="vehicle-image"/>
+                                            </div>
+                                            <div class="thumbnail-images">
+                                                <img src="/menu/static/src/img/HX.jpg" alt="Thumbnail 1" class="thumbnail-image" onclick="changeImage('/menu/static/src/img/HX.jpg')"/>
+                                                <img src="/menu/static/src/img/BX.jpg" alt="Thumbnail 2" class="thumbnail-image" onclick="changeImage('/menu/static/src/img/BX.jpg')"/>
+                                            </div>
+                                        </div>
+                                        <div class="section middle-section">
+                                            <div class="led-messages">
+                                                <button class="led-button">LED MESSAGE 1</button>
+                                                <button class="led-button">LED MESSAGE 2</button>
+                                            </div>
+                                            <button class="manual-process" onclick="openModal()">Manual Process</button>
+                                        </div>
+                                        <div class="section activities-section">
+                                            <div class="activities">
+                                                <table class="activities-table">
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Activity</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>SH1834567 go through entry gate</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>Open Barrier</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>Display Message on LED</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="lane" onclick="toggleSingleDetail('lane-details-3')">
+                                    <div class="lane-info">
+                                        <div class="lane-details-box">
+                                            <span class="lane-icon"><i class="fa fa-car"></i></span>
+                                            <span class="lane-text">Lane 3</span>
+                                            <span class="lane-indicator">
+                                                <div class="arrow in">
+                                                    <div class="arrow-text in">IN</div>
+                                                    <div class="arrow-body in-body"></div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="lane-details-3" class="lane-details-content" style="display: none;">
+                                    <div class="lane-sections">
+                                        <div class="section vehicle-section">
+                                            <div class="main-vehicle">
+                                                <img id="main-vehicle-image" src="/menu/static/src/img/HX.jpg" alt="Main Vehicle Image" class="vehicle-image"/>
+                                            </div>
+                                            <div class="thumbnail-images">
+                                                <img src="/menu/static/src/img/HX.jpg" alt="Thumbnail 1" class="thumbnail-image" onclick="changeImage('/menu/static/src/img/HX.jpg')"/>
+                                                <img src="/menu/static/src/img/BX.jpg" alt="Thumbnail 2" class="thumbnail-image" onclick="changeImage('/menu/static/src/img/BX.jpg')"/>
+                                            </div>
+                                        </div>
+                                        <div class="section middle-section">
+                                            <div class="led-messages">
+                                                <button class="led-button">LED MESSAGE 1</button>
+                                                <button class="led-button">LED MESSAGE 2</button>
+                                            </div>
+                                            <button class="manual-process" onclick="goToPage('http://localhost:8069/vehicle/registration/dashboard')">Manual Process</button>
+                                        </div>
+                                        <div class="section activities-section">
+                                            <div class="activities">
+                                                <table class="activities-table">
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Activity</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>SH1834567 go through entry gate</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>Open Barrier</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>Display Message on LED</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="lane" onclick="toggleSingleDetail('lane-details-4')">
+                                    <div class="lane-info">
+                                        <div class="lane-details-box">
+                                            <span class="lane-icon"><i class="fa fa-car"></i></span>
+                                            <span class="lane-text">Lane 4</span>
+                                            <span class="lane-indicator">
+                                                <div class="arrow in">
+                                                    <div class="arrow-text in">IN</div>
+                                                    <div class="arrow-body in-body"></div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="lane-details-4" class="lane-details-content" style="display: none;">
+                                    <div class="lane-sections">
+                                        <div class="section vehicle-section">
+                                            <div class="main-vehicle">
+                                                <img id="main-vehicle-image" src="/menu/static/src/img/HX.jpg" alt="Main Vehicle Image" class="vehicle-image"/>
+                                            </div>
+                                            <div class="thumbnail-images">
+                                                <img src="/menu/static/src/img/HX.jpg" alt="Thumbnail 1" class="thumbnail-image" onclick="changeImage('/menu/static/src/img/HX.jpg')"/>
+                                                <img src="/menu/static/src/img/BX.jpg" alt="Thumbnail 2" class="thumbnail-image" onclick="changeImage('/menu/static/src/img/BX.jpg')"/>
+                                            </div>
+                                        </div>
+                                        <div class="section middle-section">
+                                            <div class="led-messages">
+                                                <button class="led-button">LED MESSAGE 1</button>
+                                                <button class="led-button">LED MESSAGE 2</button>
+                                            </div>
+                                            <button class="manual-process" onclick="goToPage('http://localhost:8069/vehicle/registration/dashboard')">Manual Process</button>
+                                        </div>
+                                        <div class="section activities-section">
+                                            <div class="activities">
+                                                <table class="activities-table">
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Activity</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>SH1834567 go through entry gate</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>Open Barrier</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>Display Message on LED</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="lane" onclick="toggleSingleDetail('lane-details-5')">
+                                    <div class="lane-info">
+                                        <div class="lane-details-box">
+                                            <span class="lane-icon"><i class="fa fa-car"></i></span>
+                                            <span class="lane-text">Lane 5</span>
+                                            <span class="lane-indicator">
+                                                <div class="arrow out">
+                                                    <div class="arrow-text out">OUT</div>
+                                                    <div class="arrow-body out-body"></div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="lane-details-5" class="lane-details-content" style="display: none;">
+                                    <div class="lane-sections">
+                                        <div class="section vehicle-section">
+                                            <div class="main-vehicle">
+                                                <img id="main-vehicle-image" src="/menu/static/src/img/HX.jpg" alt="Main Vehicle Image" class="vehicle-image"/>
+                                            </div>
+                                            <div class="thumbnail-images">
+                                                <img src="/menu/static/src/img/HX.jpg" alt="Thumbnail 1" class="thumbnail-image" onclick="changeImage('/menu/static/src/img/HX.jpg')"/>
+                                                <img src="/menu/static/src/img/BX.jpg" alt="Thumbnail 2" class="thumbnail-image" onclick="changeImage('/menu/static/src/img/BX.jpg')"/>
+                                            </div>
+                                        </div>
+                                        <div class="section middle-section">
+                                            <div class="led-messages">
+                                                <button class="led-button">LED MESSAGE 1</button>
+                                                <button class="led-button">LED MESSAGE 2</button>
+                                            </div>
+                                            <button class="manual-process" onclick="goToPage('http://localhost:8069/vehicle/registration/dashboard')">Manual Process</button>
+                                        </div>
+                                        <div class="section activities-section">
+                                            <div class="activities">
+                                                <table class="activities-table">
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Activity</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>SH1834567 go through entry gate</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>Open Barrier</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>Display Message on LED</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="lane-group-2" class="lane-group" style="display: none;">
+                                <div class="lane" onclick="toggleSingleDetail('lane-details-6')">
+                                    <div class="lane-info">
+                                        <div class="lane-details-box">
+                                            <span class="lane-icon"><i class="fa fa-car"></i></span>
+                                            <span class="lane-text">Lane 1</span>
+                                            <span class="lane-indicator">
+                                                <div class="arrow in">
+                                                    <div class="arrow-text in">IN</div>
+                                                    <div class="arrow-body in-body"></div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="lane-details-6" class="lane-details-content" style="display: none;">
+                                    <div class="lane-sections">
+                                        <div class="section vehicle-section">
+                                            <div class="main-vehicle">
+                                                <img id="main-vehicle-image" src="/menu/static/src/img/HX.jpg" alt="Main Vehicle Image" class="vehicle-image"/>
+                                            </div>
+                                            <div class="thumbnail-images">
+                                                <img src="/menu/static/src/img/HX.jpg" alt="Thumbnail 1" class="thumbnail-image" onclick="changeImage('/menu/static/src/img/HX.jpg')"/>
+                                                <img src="/menu/static/src/img/BX.jpg" alt="Thumbnail 2" class="thumbnail-image" onclick="changeImage('/menu/static/src/img/BX.jpg')"/>
+                                            </div>
+                                        </div>
+                                        <div class="section middle-section">
+                                            <div class="led-messages">
+                                                <button class="led-button">LED MESSAGE 1</button>
+                                                <button class="led-button">LED MESSAGE 2</button>
+                                            </div>
+                                            <button class="manual-process" onclick="goToPage('http://localhost:8069/vehicle/registration/dashboard')">Manual Process</button>
+                                        </div>
+                                        <div class="section activities-section">
+                                            <div class="activities">
+                                                <table class="activities-table">
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Activity</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>SH1834567 go through entry gate</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>Open Barrier</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>Display Message on LED</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="lane" onclick="toggleSingleDetail('lane-details-7')">
+                                    <div class="lane-info">
+                                        <div class="lane-details-box">
+                                            <span class="lane-icon"><i class="fa fa-car"></i></span>
+                                            <span class="lane-text">Lane 2</span>
+                                            <span class="lane-indicator">
+                                                <div class="arrow in">
+                                                    <div class="arrow-text in">IN</div>
+                                                    <div class="arrow-body in-body"></div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="lane-details-7" class="lane-details-content" style="display: none;">
+                                    <div class="lane-sections">
+                                        <div class="section vehicle-section">
+                                            <div class="main-vehicle">
+                                                <img id="main-vehicle-image" src="/menu/static/src/img/HX.jpg" alt="Main Vehicle Image" class="vehicle-image"/>
+                                            </div>
+                                            <div class="thumbnail-images">
+                                                <img src="/menu/static/src/img/HX.jpg" alt="Thumbnail 1" class="thumbnail-image" onclick="changeImage('/menu/static/src/img/HX.jpg')"/>
+                                                <img src="/menu/static/src/img/BX.jpg" alt="Thumbnail 2" class="thumbnail-image" onclick="changeImage('/menu/static/src/img/BX.jpg')"/>
+                                            </div>
+                                        </div>
+                                        <div class="section middle-section">
+                                            <div class="led-messages">
+                                                <button class="led-button">LED MESSAGE 1</button>
+                                                <button class="led-button">LED MESSAGE 2</button>
+                                            </div>
+                                            <button class="manual-process" onclick="goToPage('http://localhost:8069/vehicle/registration/dashboard')">Manual Process</button>
+                                        </div>
+                                        <div class="section activities-section">
+                                            <div class="activities">
+                                                <table class="activities-table">
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Activity</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>SH1834567 go through entry gate</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>Open Barrier</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>Display Message on LED</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="lane" onclick="toggleSingleDetail('lane-details-8')">
+                                    <div class="lane-info">
+                                        <div class="lane-details-box">
+                                            <span class="lane-icon"><i class="fa fa-car"></i></span>
+                                            <span class="lane-text">Lane 3</span>
+                                            <span class="lane-indicator">
+                                                <div class="arrow out">
+                                                    <div class="arrow-text out">OUT</div>
+                                                    <div class="arrow-body out-body"></div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="lane-details-8" class="lane-details-content" style="display: none;">
+                                    <div class="lane-sections">
+                                        <div class="section vehicle-section">
+                                            <div class="main-vehicle">
+                                                <img id="main-vehicle-image" src="/menu/static/src/img/HX.jpg" alt="Main Vehicle Image" class="vehicle-image"/>
+                                            </div>
+                                            <div class="thumbnail-images">
+                                                <img src="/menu/static/src/img/HX.jpg" alt="Thumbnail 1" class="thumbnail-image" onclick="changeImage('/menu/static/src/img/HX.jpg')"/>
+                                                <img src="/menu/static/src/img/BX.jpg" alt="Thumbnail 2" class="thumbnail-image" onclick="changeImage('/menu/static/src/img/BX.jpg')"/>
+                                            </div>
+                                        </div>
+                                        <div class="section middle-section">
+                                            <div class="led-messages">
+                                                <button class="led-button">LED MESSAGE 1</button>
+                                                <button class="led-button">LED MESSAGE 2</button>
+                                            </div>
+                                            <button class="manual-process" onclick="goToPage('http://localhost:8069/vehicle/registration/dashboard')">Manual Process</button>
+                                        </div>
+                                        <div class="section activities-section">
+                                            <div class="activities">
+                                                <table class="activities-table">
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Activity</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>SH1834567 go through entry gate</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>Open Barrier</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>Display Message on LED</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="lane" onclick="toggleSingleDetail('lane-details-9')">
+                                    <div class="lane-info">
+                                        <div class="lane-details-box">
+                                            <span class="lane-icon"><i class="fa fa-car"></i></span>
+                                            <span class="lane-text">Lane 4</span>
+                                            <span class="lane-indicator">
+                                                <div class="arrow out">
+                                                    <div class="arrow-text out">OUT</div>
+                                                    <div class="arrow-body out-body"></div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="lane-details-9" class="lane-details-content" style="display: none;">
+                                    <div class="lane-sections">
+                                        <div class="section vehicle-section">
+                                            <div class="main-vehicle">
+                                                <img id="main-vehicle-image" src="/menu/static/src/img/HX.jpg" alt="Main Vehicle Image" class="vehicle-image"/>
+                                            </div>
+                                            <div class="thumbnail-images">
+                                                <img src="/menu/static/src/img/HX.jpg" alt="Thumbnail 1" class="thumbnail-image" onclick="changeImage('/menu/static/src/img/HX.jpg')"/>
+                                                <img src="/menu/static/src/img/BX.jpg" alt="Thumbnail 2" class="thumbnail-image" onclick="changeImage('/menu/static/src/img/BX.jpg')"/>
+                                            </div>
+                                        </div>
+                                        <div class="section middle-section">
+                                            <div class="led-messages">
+                                                <button class="led-button">LED MESSAGE 1</button>
+                                                <button class="led-button">LED MESSAGE 2</button>
+                                            </div>
+                                            <button class="manual-process" onclick="goToPage('http://localhost:8069/vehicle/registration/dashboard')">Manual Process</button>
+                                        </div>
+                                        <div class="section activities-section">
+                                            <div class="activities">
+                                                <table class="activities-table">
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Activity</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>SH1834567 go through entry gate</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>Open Barrier</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>Display Message on LED</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="lane-group-3" class="lane-group" style="display: none;">
+                                <div class="lane" onclick="toggleSingleDetail('lane-details-10')">
+                                    <div class="lane-info">
+                                        <div class="lane-details-box">
+                                            <span class="lane-icon"><i class="fa fa-car"></i></span>
+                                            <span class="lane-text">Lane 1</span>
+                                            <span class="lane-indicator">
+                                                <div class="arrow in">
+                                                    <div class="arrow-text in">IN</div>
+                                                    <div class="arrow-body in-body"></div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="lane-details-10" class="lane-details-content" style="display: none;">
+                                    <div class="lane-sections">
+                                        <div class="section vehicle-section">
+                                            <div class="main-vehicle">
+                                                <img id="main-vehicle-image" src="/menu/static/src/img/HX.jpg" alt="Main Vehicle Image" class="vehicle-image"/>
+                                            </div>
+                                            <div class="thumbnail-images">
+                                                <img src="/menu/static/src/img/HX.jpg" alt="Thumbnail 1" class="thumbnail-image" onclick="changeImage('/menu/static/src/img/HX.jpg')"/>
+                                                <img src="/menu/static/src/img/BX.jpg" alt="Thumbnail 2" class="thumbnail-image" onclick="changeImage('/menu/static/src/img/BX.jpg')"/>
+                                            </div>
+                                        </div>
+                                        <div class="section middle-section">
+                                            <div class="led-messages">
+                                                <button class="led-button">LED MESSAGE 1</button>
+                                                <button class="led-button">LED MESSAGE 2</button>
+                                            </div>
+                                            <button class="manual-process" onclick="goToPage('http://localhost:8069/vehicle/registration/dashboard')">Manual Process</button>
+                                        </div>
+                                        <div class="section activities-section">
+                                            <div class="activities">
+                                                <table class="activities-table">
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Activity</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>SH1834567 go through entry gate</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>Open Barrier</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>Display Message on LED</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="lane" onclick="toggleSingleDetail('lane-details-11')">
+                                    <div class="lane-info">
+                                        <div class="lane-details-box">
+                                            <span class="lane-icon"><i class="fa fa-car"></i></span>
+                                            <span class="lane-text">Lane 2</span>
+                                            <span class="lane-indicator">
+                                                <div class="arrow out">
+                                                    <div class="arrow-text out">OUT</div>
+                                                    <div class="arrow-body out-body"></div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="lane-details-11" class="lane-details-content" style="display: none;">
+                                    <div class="lane-sections">
+                                        <div class="section vehicle-section">
+                                            <div class="main-vehicle">
+                                                <img id="main-vehicle-image" src="/menu/static/src/img/HX.jpg" alt="Main Vehicle Image" class="vehicle-image"/>
+                                            </div>
+                                            <div class="thumbnail-images">
+                                                <img src="/menu/static/src/img/HX.jpg" alt="Thumbnail 1" class="thumbnail-image" onclick="changeImage('/menu/static/src/img/HX.jpg')"/>
+                                                <img src="/menu/static/src/img/BX.jpg" alt="Thumbnail 2" class="thumbnail-image" onclick="changeImage('/menu/static/src/img/BX.jpg')"/>
+                                            </div>
+                                        </div>
+                                        <div class="section middle-section">
+                                            <div class="led-messages">
+                                                <button class="led-button">LED MESSAGE 1</button>
+                                                <button class="led-button">LED MESSAGE 2</button>
+                                            </div>
+                                            <button class="manual-process" onclick="goToPage('http://localhost:8069/vehicle/registration/dashboard')">Manual Process</button>
+                                        </div>
+                                        <div class="section activities-section">
+                                            <div class="activities">
+                                                <table class="activities-table">
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Activity</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>SH1834567 go through entry gate</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>Open Barrier</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>Display Message on LED</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="lane-group-4" class="lane-group" style="display: none;">
+                                <div class="lane" onclick="toggleSingleDetail('lane-details-12')">
+                                    <div class="lane-info">
+                                        <div class="lane-details-box">
+                                            <span class="lane-icon"><i class="fa fa-car"></i></span>
+                                            <span class="lane-text">Lane 1</span>
+                                            <span class="lane-indicator">
+                                                <div class="arrow in">
+                                                    <div class="arrow-text in">IN</div>
+                                                    <div class="arrow-body in-body"></div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="lane-details-12" class="lane-details-content" style="display: none;">
+                                    <div class="lane-sections">
+                                        <div class="section vehicle-section">
+                                            <div class="main-vehicle">
+                                                <img id="main-vehicle-image" src="/menu/static/src/img/HX.jpg" alt="Main Vehicle Image" class="vehicle-image"/>
+                                            </div>
+                                            <div class="thumbnail-images">
+                                                <img src="/menu/static/src/img/HX.jpg" alt="Thumbnail 1" class="thumbnail-image" onclick="changeImage('/menu/static/src/img/HX.jpg')"/>
+                                                <img src="/menu/static/src/img/BX.jpg" alt="Thumbnail 2" class="thumbnail-image" onclick="changeImage('/menu/static/src/img/BX.jpg')"/>
+                                            </div>
+                                        </div>
+                                        <div class="section middle-section">
+                                            <div class="led-messages">
+                                                <button class="led-button">LED MESSAGE 1</button>
+                                                <button class="led-button">LED MESSAGE 2</button>
+                                            </div>
+                                            <button class="manual-process" onclick="goToPage('http://localhost:8069/vehicle/registration/dashboard')">Manual Process</button>
+                                        </div>
+                                        <div class="section activities-section">
+                                            <div class="activities">
+                                                <table class="activities-table">
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Activity</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>SH1834567 go through entry gate</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>Open Barrier</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>Display Message on LED</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="lane" onclick="toggleSingleDetail('lane-details-13')">
+                                    <div class="lane-info">
+                                        <div class="lane-details-box">
+                                            <span class="lane-icon"><i class="fa fa-car"></i></span>
+                                            <span class="lane-text">Lane 2</span>
+                                            <span class="lane-indicator">
+                                                <div class="arrow out">
+                                                    <div class="arrow-text out">OUT</div>
+                                                    <div class="arrow-body out-body"></div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="lane-details-13" class="lane-details-content" style="display: none;">
+                                    <div class="lane-sections">
+                                        <div class="section vehicle-section">
+                                            <div class="main-vehicle">
+                                                <img id="main-vehicle-image" src="/menu/static/src/img/HX.jpg" alt="Main Vehicle Image" class="vehicle-image"/>
+                                            </div>
+                                            <div class="thumbnail-images">
+                                                <img src="/menu/static/src/img/HX.jpg" alt="Thumbnail 1" class="thumbnail-image" onclick="changeImage('/menu/static/src/img/HX.jpg')"/>
+                                                <img src="/menu/static/src/img/BX.jpg" alt="Thumbnail 2" class="thumbnail-image" onclick="changeImage('/menu/static/src/img/BX.jpg')"/>
+                                            </div>
+                                        </div>
+                                        <div class="section middle-section">
+                                            <div class="led-messages">
+                                                <button class="led-button">LED MESSAGE 1</button>
+                                                <button class="led-button">LED MESSAGE 2</button>
+                                            </div>
+                                            <button class="manual-process" onclick="goToPage('http://localhost:8069/vehicle/registration/dashboard')">Manual Process</button>
+                                        </div>
+                                        <div class="section activities-section">
+                                            <div class="activities">
+                                                <table class="activities-table">
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Activity</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>SH1834567 go through entry gate</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>Open Barrier</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>28/05/2024 20:01:01</td>
+                                                        <td>Display Message on LED</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="checkModal" class="modal">
+                    <div class="modal-content" style="border-radius: 10px; padding: 20px; background-color: #f8f9fa; box-shadow: 0px 0px 10px rgba(0,0,0,0.1);">
+                        <h2 style="text-align: center; font-size: 24px; margin-bottom: 20px; color: #333;">COMING PLAN</h2>
+
+                        <div class="custom-container">
+                            <div class="left-side">
+                                <div style="margin-bottom: 20px;">
+                                    <div style="margin-bottom: 15px;">
+                                        <label for="search-reg-no" style="font-weight: bold; display: inline-block; width: 150px; font-size: 16px;">Reg - No.</label>
+                                        <input type="text" id="search-reg-no" placeholder="Enter Registration Number" style="width: calc(100% - 160px); padding: 10px; border: 1px solid #ced4da; border-radius: 5px;" />
+                                    </div>
+                                    <div style="margin-bottom: 15px;">
+                                        <label for="search-plate" style="font-weight: bold; display: inline-block; width: 150px; font-size: 16px;">Vehicle Plate</label>
+                                        <input type="text" id="search-plate" placeholder="Enter Vehicle Plate" style="width: calc(100% - 160px); padding: 10px; border: 1px solid #ced4da; border-radius: 5px;" />
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <button onclick="searchLogs()" style="width: 150px; background-color: #007bff; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">Search</button>
+                                    </div>
+                                </div>
+
+                                <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; background-color: #ffffff; border-radius: 5px;">
+                                    <thead>
+                                        <tr style="background-color: #007bff; color: white;">
+                                            <th style="border: 1px solid #ddd; padding: 12px; text-align: left; font-size: 16px; font-weight: bold;">Reg. No</th>
+                                            <th style="border: 1px solid #ddd; padding: 12px; text-align: left; font-size: 16px; font-weight: bold;">Plate</th>
+                                            <th style="border: 1px solid #ddd; padding: 12px; text-align: left; font-size: 16px; font-weight: bold;">Driver Name</th>
+                                            <th style="border: 1px solid #ddd; padding: 12px; text-align: left; font-size: 16px; font-weight: bold;">Vehicle Type</th>
+                                            <th style="border: 1px solid #ddd; padding: 12px; text-align: left; font-size: 16px; font-weight: bold;">Start Time</th>
+                                            <th style="border: 1px solid #ddd; padding: 12px; text-align: left; font-size: 16px; font-weight: bold;">End Time</th>
+                                            <th style="border: 1px solid #ddd; padding: 12px; text-align: left; font-size: 16px; font-weight: bold;">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table-body">
+                                        <!-- Các hàng dữ liệu sẽ được thêm vào đây -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="right-side">
+                                <div class="registration-info">
+                                    <div class="info-column">
+                                        <div class="info-row">
+                                            <label>Reg - No:</label>
+                                            <input type="text" id="reg-no" readonly="true" />
+                                        </div>
+                                        <div class="info-row">
+                                            <label>Register Date:</label>
+                                            <input type="text" id="register_date" readonly="true" />
+                                        </div>
+                                        <div class="info-row">
+                                            <label>Driver Name:</label>
+                                            <input type="text" id="driver-name" readonly="true" />
+                                        </div>
+                                        <div class="info-row">
+                                            <label>Start Date:</label>
+                                            <input type="text" id="start_date" readonly="true" />
+                                        </div>
+                                        <div class="info-row">
+                                            <label>Start Time:</label>
+                                            <input type="text" id="start_time" readonly="true" />
+                                        </div>
+                                        <div class="info-row">
+                                            <label>Working areas:</label>
+                                            <input type="text" id="required_working_areas" readonly="true" />
+                                        </div>
+                                        <div class="info-row">
+                                            <label>Vehicle Status:</label>
+                                            <input type="text" id="vehicle_status" readonly="true" />
+                                        </div>
+                                    </div>
+                                    <div class="info-column">
+                                        <div class="info-row">
+                                            <label>Vehicle Plate:</label>
+                                            <input type="text" id="vehicle-plate" readonly="true" />
+                                        </div>
+                                        <div class="info-row">
+                                            <label>Host:</label>
+                                            <input type="text" id="host" readonly="true" />
+                                        </div>
+                                        <div class="info-row">
+                                            <label>Driver ID:</label>
+                                            <input type="text" id="driver_id" readonly="true" />
+                                        </div>
+                                        <div class="info-row">
+                                            <label>End Date:</label>
+                                            <input type="text" id="end_date" readonly="true" />
+                                        </div>
+                                        <div class="info-row">
+                                            <label>End Time:</label>
+                                            <input type="text" id="end_time" readonly="true" />
+                                        </div>
+                                        <div class="info-row">
+                                            <label>Gates:</label>
+                                            <input type="text" id="gates" readonly="true" />
+                                        </div>
+                                        <div class="info-row">
+                                            <label>Reg - Status:</label>
+                                            <input type="text" id="reg_status" readonly="true" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="approveModal" class="modal">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <img src="/menu/static/src/img/Logo_small_96.png" alt="Logo" class="logo"/>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="input-group">
+                                            <label for="reason-dropdown">Reason*</label>
+                                            <select id="reason-dropdown" class="input-field">
+                                                <!-- Lý do sẽ được tải vào đây -->
+                                            </select>
+                                        </div>
+                                        <div class="input-group">
+                                            <label for="content">Content</label>
+                                            <textarea id="content" class="input-field" placeholder="Enter reason text..."></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn confirm-btn" onclick="confirmApprove()">Confirm</button>
+                                        <button class="btn cancel-btn" onclick="closeApproveModal()">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <button id="approveButton" class="btn btn-primary" onclick="openApproveModal()" style="background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Approve</button>
+                            <button class="btn btn-secondary" onclick="closeModal()" style="background-color: #6c757d; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    function showLaneGroup(gateId) {
+                        var gate1 = document.getElementById("lane-group-1");
+                        var gate2 = document.getElementById("lane-group-2");
+                        var gate3 = document.getElementById("lane-group-3");
+                        var gate4 = document.getElementById("lane-group-4");
+
+                        // Ẩn tất cả các nhóm làn đường
+                        gate1.style.display = "none";
+                        gate2.style.display = "none";
+                        gate3.style.display = "none";
+                        gate4.style.display = "none";
+
+                        // Hiển thị nhóm làn đường tương ứng
+                        if (gateId === 'gate1') {
+                            gate1.style.display = "block";
+                        } else if (gateId === 'gate2') {
+                            gate2.style.display = "block";
+                        } else if (gateId === 'gate3') {
+                            gate3.style.display = "block";
+                        } else if (gateId === 'gate4') {
+                            gate4.style.display = "block";
+                        }
+                    }
+                    function toggleSingleDetail(elementId) {
+                        var element = document.getElementById(elementId);
+                        if (element.style.display === "none") {
+                            element.style.display = "block";
+                        } else {
+                            element.style.display = "none";
+                        }
+                    }
+                    function goToPage(url) {
+                        window.location.href = url;
+                    }
+                    function changeImage(imageUrl) {
+                        document.getElementById('main-vehicle-image').src = imageUrl;
+                    }
+                    function toggleDropdown() {
+                        var dropdown = document.getElementById('dropdown-menu');
+                        if (dropdown.style.display === "none") {
+                            dropdown.style.display = "block";
+                        } else {
+                            dropdown.style.display = "none";
+                        }
+                    }
+                    function toggleSelectDropdown() {
+                        var dropdown = document.getElementById('select-dropdown');
+                        if (dropdown.style.display === "none") {
+                            dropdown.style.display = "block";
+                        } else {
+                            dropdown.style.display = "none";
+                        }
+                    }
+                    function toggleNotificationDropdown() {
+                        fetch('/coming_plan/notifications', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            credentials: 'same-origin',
+                            body: JSON.stringify({}),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            const notifications = data.notifications || [];
+                            const dropdown = document.getElementById('notification-dropdown');
+                            dropdown.innerHTML = ''; // Xóa nội dung cũ
+
+                            if (notifications.length) {
+                                notifications.forEach(notification => {
+                                    const div = document.createElement('div');
+                                    div.style.padding = '10px';
+                                    div.style.borderBottom = '1px solid #eee';
+                                    div.innerHTML = `<strong>${notification.title}</strong><p style="margin: 0; color: #555;">${notification.message}</p><span style="font-size: 0.8em; color: #888;">${notification.timestamp}</span>`;
+                                    dropdown.appendChild(div);
+                                });
+                            } else {
+                                dropdown.innerHTML = '<div style="padding: 10px; text-align: center; color: #888;">No notifications</div>';
+                            }
+
+                            dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+                        })
+                        .catch(error => console.error('Error:', error));
+                    }
+                    function searchLogs() {
+                        const regNo = document.getElementById('search-reg-no').value.trim().toLowerCase();
+                        const plate = document.getElementById('search-plate').value.trim().toLowerCase();
+
+                        const rows = Array.from(document.querySelectorAll('#table-body tr'));
+
+                        rows.forEach(row => {
+                            const regNoCell = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
+                            const plateCell = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+
+                            const regNoMatch = !regNo || regNoCell.includes(regNo);
+                            const plateMatch = !plate || plateCell.includes(plate);
+
+                            if (regNoMatch &amp;&amp; plateMatch) {
+                                row.style.display = '';
+                                row.parentNode.insertBefore(row, row.parentNode.firstChild);
+                            } else {
+                                row.style.display = 'none';
+                            }
+                        });
+                    }
+                    function openModal() {
+                        loadAllLogs();
+                        document.getElementById('checkModal').style.display = 'block';
+                    }
+                    let logsData = [];
+                    let currentLog = null;
+
+                    function loadAllLogs() {
+                        fetch('/control_in_out/all', {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            logsData = data; // Lưu trữ logs vào biến toàn cục
+                            const tableBody = document.getElementById('table-body');
+                            tableBody.innerHTML = ''; // Xóa nội dung cũ
+
+                            data.forEach(log => {
+                                const row = document.createElement('tr');
+
+
+                                row.innerHTML = `
+                                    <td>${log.reg_no}</td>
+                                    <td>${log.plate}</td>
+                                    <td>${log.driver_name}</td>
+                                    <td>${log.vehicle_type}</td>
+                                    <td>${log.start_date} ${log.start_time}</td>
+                                    <td>${log.end_date} ${log.end_time}</td>
+                                    <td>${log.status}</td>
+                                `;
+
+                                if (log.register_id) {
+                                    row.setAttribute('onclick', `onRowClick(${log.register_id})`);
+                                } else {
+                                    row.setAttribute('onclick', 'alert("Invalid register ID")');
+                                }
+                                tableBody.appendChild(row);
+                            });
+                        })
+                        .catch(error => console.error('Error:', error));
+                    }
+                    // Gọi hàm này khi trang được tải
+                    loadAllLogs();
+
+                    function closeModal() {
+                        document.getElementById('checkModal').style.display = 'none';
+                    }
+
+                    function openApproveModal() {
+                        if (currentLog) {
+                            // Lấy lý do từ log hiện tại và hiển thị trong dropdown
+                            const dropdown = document.getElementById('reason-dropdown');
+                            dropdown.innerHTML = '';
+                            const option = document.createElement('option');
+                            option.value = currentLog.reason;
+                            option.text = currentLog.reason;
+                            dropdown.appendChild(option);
+                        }
+                        document.getElementById('approveModal').style.display = 'block';
+                    }
+                    function closeApproveModal() {
+                        document.getElementById('approveModal').style.display = 'none';
+                    }
+
+                    function confirmApprove() {
+                        var registerId = currentLog.register_id;
+                        var newStatus = '1';
+
+                        // Sử dụng FormData để gửi yêu cầu POST
+                        var formData = new FormData();
+                        formData.append('register_id', registerId);
+                        formData.append('status', newStatus);
+
+                        fetch('/control_in_out/update_status', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                const logElement = document.getElementById(`log-${registerId}`);
+                                console.log(`Current register ID: ${registerId}`);
+                                if (logElement) {
+                                    logElement.querySelector('.status-label').textContent = 'Done';
+                                    logElement.querySelector('.status-label').classList.add('done');
+                                    logElement.classList.add('done');
+                                } else {
+                                    console.error(`Log element with ID log-${registerId} not found`);
+                                }
+                                loadAllLogs();
+                                closeApproveModal();
+                            } else {
+                                alert('Failed to update status: ' + data.error);
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                    }
+                    function onActivityLogClick(element) {
+                        const plate = element.dataset.vehiclePlate;
+                        const status = element.dataset.statusLabel;
+           
+                        document.getElementById('plate-label').textContent = `${plate}`;
+                        document.getElementById('status-label').textContent = `${status}`;
+                    }
+                    function loadRegisterInfo(register_id) {
+                        // Đảm bảo rằng register_id là một số nguyên
+                        if (typeof register_id !== 'number') {
+                            register_id = Number(register_id);
+                        }
+
+                        // Chỉ tiếp tục nếu register_id là số hợp lệ
+                        if (!isNaN(register_id)) {
+                            fetch(`/control_in_out/get_register_info?register_id=${encodeURIComponent(register_id)}`, {
+                                method: 'GET',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.error) {
+                                    alert(data.error);
+                                } else {
+                                    let registerInfo = data[0]; // Trả về một đối tượng duy nhất
+
+                                    if (registerInfo) {
+                                        document.getElementById('reg-no').value = registerInfo.reg_no;
+                                        document.getElementById('vehicle-plate').value = registerInfo.vehicle_plate;
+                                        document.getElementById('register_date').value = registerInfo.register_date;
+                                        document.getElementById('host').value = registerInfo.host;
+                                        document.getElementById('driver-name').value = registerInfo.driver_name;
+                                        document.getElementById('driver_id').value = registerInfo.driver_id;
+                                        document.getElementById('start_date').value = registerInfo.start_date;
+                                        document.getElementById('end_date').value = registerInfo.end_date;
+                                        document.getElementById('start_time').value = registerInfo.start_time;
+                                        document.getElementById('end_time').value = registerInfo.end_time;
+
+                                        document.getElementById('required_working_areas').value = Array.isArray(registerInfo.required_working_areas) ? registerInfo.required_working_areas.join(', ') : 'N/A';
+
+                                        document.getElementById('gates').value = Array.isArray(registerInfo.gates) ? registerInfo.gates.join(', ') : 'N/A';
+
+                                        document.getElementById('vehicle_status').value = registerInfo.vehicle_status;
+                                        document.getElementById('reg_status').value = registerInfo.reg_status;
+                                        document.getElementById('detail-section').style.display = 'block';
+                                    } else {
+                                        alert("No valid data received");
+                                    }
+                                }
+                            })
+                            .catch(error => console.error('Error:', error));
+                        } else {
+                            alert("Invalid register ID");
+                        }
+                    }
+                    function onRowClick(registerId) {
+                        if (typeof registerId !== 'number') {
+                            registerId = Number(registerId);
+                        }
+                        if (!isNaN(registerId)) {
+                            currentLog = logsData.find(log => log.register_id === registerId);
+                            if (currentLog) {
+                                loadRegisterInfo(registerId);
+                            } else {
+                                alert("Invalid register ID");
+                            }
+                        } else {
+                            alert("Invalid register ID");
+                        }
+                    }
+                    function updateTime() {
+                        var now = new Date();
+                        var day = String(now.getDate()).padStart(2, '0');
+                        var month = String(now.getMonth() + 1).padStart(2, '0');
+                        var year = now.getFullYear();
+                        var hours = String(now.getHours()).padStart(2, '0');
+                        var minutes = String(now.getMinutes()).padStart(2, '0');
+                        var seconds = String(now.getSeconds()).padStart(2, '0');
+                        var formattedTime = 'DATE: ' + day + '/' + month + '/' + year + ' ' + hours + ':' + minutes + ':' + seconds;
+                        document.getElementById('current-date-time').innerText = formattedTime;
+                    }
+
+                    function logout() {
+                        window.location.href = '/web/session/logout';
+                    }
+
+                    setInterval(updateTime, 1000);
+                    updateTime();
+                </script>
+            </t>
+            <style>
+                .activities-log {
+                    padding: 15px;
+                    background-color: #f9f9f9;
+                    border-radius: 5px;
+                    border: 1px solid #ddd;
+                }
+                .activities-log-title {
+                    margin-bottom: 20px;
+                    text-align: center;
+                    font-size: 24px;
+                    color: #333;
+                    font-weight: bold;
+                    background-color: #007bff;
+                    color: #fff;
+                    padding: 10px;
+                    border-radius: 5px;
+                    margin-top:7px;
+                }
+                .activity-log-item {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 15px;
+                    padding: 10px;
+                    border: 1px solid #ddd;
+                    border-radius: 5px;
+                    background-color: #fff;
+                }
+
+                .activity-log-icon {
+                    font-size: 63px;
+                    color: #dc3545;
+                    margin-right: 15px;
+                }
+                .activity-log-icon-green {
+                    font-size: 63px;
+                    color: #45DC35;
+                    margin-right: 15px;
+                }
+                .activity-log-details {
+                    flex-grow: 1;
+                }
+
+                .activity-log-details p {
+                    margin: 5px 0;
+                    font-size: 16px;
+                }
+
+                .activity-log-status {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-end;
+                }
+
+
+                .modal {
+                    display: none;
+                    position: fixed;
+                    z-index: 1;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    height: 100%;
+                    overflow: auto;
+                    background-color: rgba(0, 0, 0, 0.4);
+                    padding-top: 60px;
+                }
+
+                .modal-content {
+                    background-color: #fefefe;
+                    margin: 5% auto;
+                    padding: 20px;
+                    border: 1px solid #888;
+                    width: 80%;
+                    max-width: 900px;
+                    border-radius: 8px;
+                    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+                    max-width: 100%;
+                    width: 1141px;
+                }
+                .activities-log-content {
+                    max-height: 300px;
+                    overflow-y: auto;
+                }
+                .modal-header {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    margin-bottom: 20px;
+                }
+                .modal-header img.logo {
+                    width: 50px;
+                    height: auto;
+                }
+                .modal-header h2 {
+                    font-size: 20px;
+                    font-weight: bold;
+                    color: #333;
+                    margin: 0;
+                }
+                .input-group {
+                    margin-bottom: 15px;
+                }
+                .input-group label {
+                    display: block;
+                    font-weight: bold;
+                    margin-bottom: 5px;
+                    color: #555;
+                }
+                .input-field {
+                    width: calc(100% - 20px);
+                    padding: 10px;
+                    border: 1px solid #ddd;
+                    border-radius: 5px;
+                    background-color: #f9f9f9;
+                }
+                .modal-footer {
+                    display: flex;
+                    justify-content: space-between;
+                }
+
+                .btn {
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    border: none;
+                    cursor: pointer;
+                    font-size: 14px;
+                }
+
+                .confirm-btn {
+                    background-color: #007bff;
+                    color: white;
+                }
+
+                .cancel-btn {
+                    background-color: #d9534f;
+                    color: white;
+                }
+                .close {
+                    position: absolute;
+                    top: 10px;
+                    right: 10px;
+                    font-size: 18px;
+                    color: #999;
+                    cursor: pointer;
+                }
+
+                .close {
+                    color: #aaa;
+                    float: right;
+                    font-size: 28px;
+                    font-weight: bold;
+                }
+
+                .close:hover,
+                .close:focus {
+                    color: black;
+                    text-decoration: none;
+                    cursor: pointer;
+                }
+
+                .search-bar {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 20px;
+                }
+
+                .search-bar input[type="text"] {
+                    width: calc(50% - 10px);
+                    padding: 10px;
+                    font-size: 16px;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                }
+
+                .search-bar button {
+                    padding: 10px 20px;
+                    font-size: 16px;
+                    background-color: #5bc0de;
+                    color: #ffffff;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                }
+
+                .search-bar button:hover {
+                    background-color: #31b0d5;
+                }
+
+                .table-container {
+                    overflow-x: auto;
+                }
+
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-bottom: 20px;
+                }
+
+                table th,
+                table td {
+                    padding: 12px 15px;
+                    text-align: left;
+                    border-bottom: 1px solid #ddd;
+                }
+
+                table th {
+                    background-color: #5bc0de;
+                    color: #ffffff;
+                    font-weight: bold;
+                }
+
+                table tr:nth-child(even) {
+                    background-color: #f9f9f9;
+                }
+
+                .status-approved {
+                    background-color: #5cb85c;
+                    color: #ffffff;
+                    padding: 5px 10px;
+                    border-radius: 4px;
+                    display: inline-block;
+                    font-size: 14px;
+                    font-weight: bold;
+                }
+
+                .status-pending {
+                    background-color: #f0ad4e;
+                    color: #ffffff;
+                    padding: 5px 10px;
+                    border-radius: 4px;
+                    display: inline-block;
+                    font-size: 14px;
+                    font-weight: bold;
+                }
+
+                .status-rejected {
+                    background-color: #d9534f;
+                    color: #ffffff;
+                    padding: 5px 10px;
+                    border-radius: 4px;
+                    display: inline-block;
+                    font-size: 14px;
+                    font-weight: bold;
+                }
+
+                .buttons-container {
+                    text-align: right;
+                }
+
+                .buttons-container button {
+                    padding: 10px 20px;
+                    font-size: 16px;
+                    margin-left: 10px;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                }
+
+                .approve-button {
+                    background-color: #5cb85c;
+                    color: #ffffff;
+                }
+
+                .cancel-button {
+                    background-color: #d9534f;
+                    color: #ffffff;
+                }
+
+                .approve-button:hover {
+                    background-color: #4cae4c;
+                }
+
+                .cancel-button:hover {
+                    background-color: #c9302c;
+                }
+
+                .status-label {
+                    padding: 5px 10px;
+                    font-size: 14px;
+                    color: #fff;
+                    background-color: #ffc107;
+                    border-radius: 3px;
+                    margin-bottom: 10px;
+                }
+
+                .check-button {
+                    padding: 5px 10px;
+                    background-color: #ffc107;
+                    color: #000;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    font-weight: bold;
+                }
+                .header-top {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 10px;
+                    background-color: silver;
+                }
+                .bottom {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 10px;
+                    background-color: #f5f5f5;
+                    border-bottom: 1px solid #ccc;
+                    margin-top: 50px;
+                }
+                .logo img {
+                    height: 40px;
+                }
+                .header-title {
+                    font-size: 20px;
+                    font-weight: bold;
+                    color: white;
+                }
+                .bottom-title {
+                    font-size: 20px;
+                    margin-left: 700px;
+                }
+                .avatar img {
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    cursor: pointer;
+                }
+                .lane-group {
+                    margin-top: 0px;
+                }
+                .lane {
+                    font-weight: bold;
+                    padding: 10px;
+                    background-color: #FFF8DC;
+                    cursor: pointer;
+                    border: 1px solid #ccc;
+                    border-radius: 5px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+                .lane-info {
+                    display: flex;
+                    align-items: center;
+                    width: 100%;
+                }
+                .lane-details-box {
+                    display: flex;
+                    align-items: center;
+                    background-color: white;
+                    padding: 10px;
+                    border-radius: 5px;
+                    width: 100%;
+                }
+                /* Thêm biểu tượng (icon) */
+                .lane-icon i {
+                    font-size: 20px;
+                    margin-right: 10px;
+                    color: gray;
+                }
+                /* Văn bản cho làn đường */
+                .lane-text {
+                    font-size: 18px;
+                    font-weight: bold;
+                    margin-right: auto;
+                }
+                /* Chỉ báo "IN" với mũi tên */
+                .lane-indicator .arrow {
+                    display: flex;
+                    align-items: center;
+                    margin-right: 1632px;
+                }
+                .lane-indicator .arrow-text {
+                    background-color: green;
+                    color: white;
+                    font-weight: bold;
+                    padding: 5px 10px;
+                    border-radius: 5px;
+                }
+                .lane-indicator .arrow-body {
+                    width: 20px;
+                    height: 20px;
+                    background-color: green;
+                    clip-path: polygon(0 0, 100% 50%, 0 100%);
+                    margin-left: 5px;
+                }
+                .lane-indicator .arrow.in:after {
+                    content: '';
+                    display: block;
+                    width: 15px;
+                    height: 23px;
+                    background-color: green;
+                    clip-path: polygon(0 0, 100% 50%, 0 100%);
+                    margin-left: 5px;
+                }
+                .lane-indicator .arrow.out:after {
+                    content: '';
+                    display: block;
+                    width: 15px;
+                    height: 23px;
+                    background-color: red;
+                    clip-path: polygon(100% 0, 0 50%, 100% 100%);
+                    margin-left: 5px;
+                }
+                .arrow-text.in {
+                    background-color: green;
+                    color: white;
+                    font-weight: bold;
+                    padding: 5px 10px;
+                    border-radius: 5px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .arrow-body.in-body {
+                    width: 20px;
+                    height: 20px;
+                    background-color: green;
+                    clip-path: polygon(0 0, 100% 50%, 0 100%);
+                    margin-left: 5px;
+                }
+                .arrow-text.out {
+                    background-color: red;
+                    color: white;
+                    font-weight: bold;
+                    padding: 5px 10px;
+                    border-radius: 5px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .arrow-body.out-body {
+                    width: 20px;
+                    height: 20px;
+                    background-color: red;
+                    clip-path: polygon(100% 0, 0 50%, 100% 100%);
+                    margin-left: 5px;
+                }
+                .lane-details-content {
+                    padding: 0px;
+                    background-color: #f0f0f0;
+                    border: 1px solid #ccc;
+                }
+                .lane-sections {
+                    display: flex;
+                    justify-content: space-between;
+                    gap: 0px;
+                }
+                .section {
+                    flex: 1;
+                    border: 1px solid #ccc;
+                    border-radius: 5px;
+                    padding: 0px;
+                    background-color: #fff;
+                }
+
+                .middle-section {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: space-around;
+                    background-color: #f0f0f0;
+                }
+                .led-button {
+                    padding: 10px;
+                    background-color: white;
+                    color: black;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    width: 100%;
+                    text-align: center;
+                    margin-top: 23px;
+                }
+                .manual-process {
+                    background-color: #ffcc00;
+                    padding: 10px;
+                    cursor: pointer;
+                    border: none;
+                    border-radius: 5px;
+                    width: 400px;
+                    text-align: center;
+                    font-weight: bold;
+                }
+                .activities-section {
+                    background-color: #f9f9f9;
+                }
+                .lane-indicator {
+                    display: flex;
+                    align-items: center;
+                    width: 1370px;
+                }
+                .activities-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                .activities-table th, .activities-table td {
+                    border: 1px solid #ccc;
+                    padding: 8px;
+                    text-align: left;
+                }
+                .activities-table th {
+                    background-color: #f5f5f5;
+                }
+                .vehicle-section {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center; /* Căn giữa các phần tử */
+                }
+                function onRowClick(registerId) {
+                    alert(`Clicked row with registerId: ${registerId}`);
+                    loadRegisterInfo(registerId);
+                }
+                .main-vehicle {
+                    margin-bottom: 20px;
+                }
+                .thumbnail-images {
+                    display: flex;
+                    justify-content: center;
+                }
+                .thumbnail-image {
+                    margin: 0 10px;
+                    margin-bottom: 13px;
+                    width: 220px;
+
+                }
+                .vehicle-image {
+                    width: 413px;
+                    height: 220px;
+                    background-color: #d0d0d0;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    margin-bottom: 10px;
+                    margin-top: 13px;
+                }
+                .lanes .lane {
+                    padding: 10px;
+                    margin-top: 10px;
+                    background-color: #f0f0f0;
+                }
+                .o_main_navbar,
+                .o_footer {
+                    display: none !important;
+                }
+                .dropdown-content a {
+                    color: black;
+                    padding: 12px 16px;
+                    text-decoration: none;
+                    display: flex;
+                    align-items: center;
+                }
+                .dropdown-content a:hover {
+                    background-color: #ddd;
+                }
+                .fa-user, .fa-sign-out-alt {
+                    margin-right: 10px;
+                }
+                .custom-container {
+                    display: flex;
+                    justify-content: space-between;
+                    gap: 20px;
+                }
+                .left-side {
+                    flex: 1;
+                    padding: 10px;
+                }
+
+                .right-side {
+                    flex: 1;
+                    padding: 10px;
+                    border-left: 2px solid #ddd;
+                }
+
+                .registration-info {
+                    display: flex;
+                    justify-content: space-between;
+                    gap: 20px;
+                }
+
+                .info-column {
+                    flex: 1;
+                    margin-left: 35px;
+                }
+
+                .info-row {
+                    margin-bottom: 10px;
+                }
+
+                .info-row label {
+                    display: inline-block;
+                    width: 120px;
+                    font-weight: bold;
+                }
+
+                .info-row input {
+                    width: calc(100% - 50px);
+                    padding: 8px;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                    background-color: #f9f9f9;
+                }
+            </style>
+        </template>
+    </data>
+</odoo>

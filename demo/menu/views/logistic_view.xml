@@ -1,0 +1,198 @@
+<odoo>
+    <record id="view_acs_register_tree_logistic" model="ir.ui.view">
+        <field name="name">acs.register.tree.logistic</field>
+        <field name="model">acs.register</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="reg_no"/>
+                <field name="visitor_name" string="Person name"/>
+                <field name="phone" string="Person ID"/>
+                <field name="company"/>
+                <field name="register_user" string="Host"/>
+                <field name="date_applied" string="Date"/>
+                <field name="end_date"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_acs_register_form_logistic" model="ir.ui.view">
+        <field name="name">acs.register.form.logistic</field>
+        <field name="model">acs.register</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="preparing,waiting_for_approval,rejected,terminated,approved"/>
+                    <button string="Submit for Approval" type="object" name="action_submit_for_approval" states="preparing,rejected"/>
+                    <button string="Approve" type="object" name="action_approve" states="waiting_for_approval"/>
+                    <button string="Reject" type="object" name="action_open_reject_wizard" states="waiting_for_approval"/>
+                    <button string="Terminate" type="object" name="action_terminate" states="preparing,rejected"/>
+                </header>
+                <sheet>
+                    <style>
+                        .o_form_view.o_xxl_form_view .o_form_sheet_bg > .o_form_sheet {
+                            max-width: 1600px !important;
+                        }
+                        .left-section {
+                            width: 60%;
+                            float: left;
+                        }
+                        .right-section {
+                            width: 40%;
+                            float: left;
+                            padding-left: 20px;
+                        }
+                        .clearfix::after {
+                            content: "";
+                            clear: both;
+                            display: table;
+                        }
+                        .o_form_label[for="required_working_areas"],
+                        .o_form_label[for="purpose_of_visit"],
+                        .o_form_label[for="gates"],
+                        .o_form_label[for="note"],
+                        .o_form_label[for="approver_ids"],
+                        .o_form_label[for="log_ids"] {
+                            display: none;
+                        }
+                    </style>
+                    <div class="clearfix">
+                        <div class="left-section">
+                            <group>
+                                <group string="GENERAL INFO" colspan="2">
+                                    <group>
+                                        <field name="reg_no" attrs="{'readonly': [('state', 'not in', ['preparing', 'rejected'])]}"/>
+                                        <field name="register_user" attrs="{'readonly': [('state', 'not in', ['preparing', 'rejected'])]}"/>
+                                        <field name="job_position" attrs="{'readonly': [('state', 'not in', ['preparing', 'rejected'])]}"/>
+                                    </group>
+                                    <group>
+                                        <field name="vehicle_type_id" attrs="{'readonly': [('state', 'not in', ['preparing', 'rejected'])]}"/>
+                                        <field name="register_date" attrs="{'readonly': [('state', 'not in', ['preparing', 'rejected'])]}"/>
+                                        <field name="department" attrs="{'readonly': [('state', 'not in', ['preparing', 'rejected'])]}"/>
+                                    </group>
+                                </group>
+                            </group>
+                            <group>
+                                <group string="APPLICANT DETAILS" colspan="2">
+                                    <group>
+                                        <field name="visitor_name" attrs="{'readonly': [('state', 'not in', ['preparing', 'rejected'])]}"/>
+                                        <field name="email" attrs="{'readonly': [('state', 'not in', ['preparing', 'rejected'])]}"/>
+                                        <field name="job_position" attrs="{'readonly': [('state', 'not in', ['preparing', 'rejected'])]}"/>
+                                        <field name="register_type" attrs="{'readonly': [('state', 'not in', ['preparing', 'rejected'])]}"/>
+                                    </group>
+                                    <group>
+                                        <field name="visitor_id" attrs="{'readonly': [('state', 'not in', ['preparing', 'rejected'])]}"/>
+                                        <field name="phone" attrs="{'readonly': [('state', 'not in', ['preparing', 'rejected'])]}"/>
+                                        <field name="company" attrs="{'readonly': [('state', 'not in', ['preparing', 'rejected'])]}"/>
+                                        <field name="date_applied" attrs="{'readonly': [('state', 'not in', ['preparing', 'rejected'])]}"/>
+                                    </group>
+                                </group>
+                            </group>
+                            <notebook>
+                                <page string="Visit info">
+                                    <group string="REGISTER TIME" colspan="2">
+                                        <group>
+                                            <field name="start_date" attrs="{'readonly': [('state', 'not in', ['preparing', 'rejected'])]}"/>
+                                            <field name="start_time" attrs="{'readonly': [('state', 'not in', ['preparing', 'rejected'])]}"/>
+                                        </group>
+                                        <group>
+                                            <field name="end_date" string="End Date" attrs="{'readonly': [('state', 'not in', ['preparing', 'rejected'])]}"/>
+                                            <field name="end_time" string="End Time" attrs="{'readonly': [('state', 'not in', ['preparing', 'rejected'])]}"/>
+                                        </group>
+                                    </group>
+                                    <group col="3">
+                                        <group string="PURPOSE OF VISIT">
+                                            <field name="purpose_of_visit" widget="many2many_checkboxes" attrs="{'readonly': [('state', 'not in', ['preparing', 'rejected'])]}"/>
+                                        </group>
+                                        <group string="REQUIRED WORKING AREAS">
+                                            <field name="required_working_areas" widget="many2many_checkboxes"  attrs="{'readonly': [('state', 'not in', ['preparing', 'rejected'])]}"/>
+                                        </group>
+                                        <group string="GATES">
+                                            <field name="gates" widget="many2many_checkboxes" attrs="{'readonly': [('state', 'not in', ['preparing', 'rejected'])]}"/>
+                                        </group>
+                                    </group>
+                                </page>
+                                <page string="Vehicles List">
+                                    <field name="vehicle_ids">
+                                        <tree string="Vehicle List">
+                                            <field name="vehicle_plate_number"/>
+                                            <field name="vehicle_info"/>
+                                            <field name="driver_name"/>
+                                            <field name="driver_identity_card" string="ID / Passport No."/>
+                                            <field name="start_time"/>
+                                            <field name="end_time"/>
+                                        </tree>
+                                        <form string="Vehicle List">
+                                            <group>
+                                                <field name="vehicle_plate_number"/>
+                                                <field name="vehicle_info"/>
+                                                <field name="driver_name"/>
+                                                <field name="driver_identity_card"/>
+                                                <field name="start_time"/>
+                                                <field name="end_time"/>
+                                                <field name="register_id" invisible="1" context="{'default_register_id': active_id}"/>
+                                            </group>
+                                        </form>
+                                    </field>
+                                </page>
+
+                                <page string="Personal List">
+                                    <field name="person_ids">
+                                        <tree string="Person List">
+                                            <field name="person_name"/>
+                                            <field name="person_identity_card" string="ID / Passport No."/>
+                                            <field name="person_company"/>
+                                            <field name="person_phone"/>
+                                            <field name="vehicle_plate_number"/>
+                                            <field name="person_email"/>
+                                        </tree>
+                                        <form string="Person List">
+                                            <group>
+                                                <field name="person_name"/>
+                                                <field name="person_identity_card"/>
+                                                <field name="person_phone"/>
+                                                <field name="person_company"/>
+                                                <field name="person_email"/>
+                                                <field name="register_id" invisible="1" context="{'default_register_id': active_id}"/>
+                                            </group>
+                                        </form>
+                                    </field>
+                                </page>
+                                <page string="Attachment">
+                                    <field name="attachment_ids" widget="many2many_binary"/>
+                                </page>
+                                <page string="Check in/out">
+                                    <!-- Nội dung tab Check in/out -->
+                                </page>
+                                <page string="Notes">
+                                    <group>
+                                        <field name="note" widget="html"/>
+                                    </group>
+                                </page>
+                            </notebook>
+                        </div>
+                        <div class="right-section">
+                            <group>
+                                <field name="approver_ids">
+                                    <tree>
+                                        <field name="approver_id" string="Approver"/>
+                                        <field name="status" string="Status"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group>
+                                <field name="log_ids">
+                                    <tree>
+                                        <field name="date"/>
+                                        <field name="activity"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </div>
+                    </div>
+                    <field name="state" invisible="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

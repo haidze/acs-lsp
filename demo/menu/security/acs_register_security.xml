@@ -1,0 +1,7 @@
+<odoo>
+    <!-- Tạo nhóm người dùng mới cho Factory Entry Approver -->
+    <record id="group_acs_register_approver" model="res.groups">
+        <field name="name">ACS Register Approver</field>
+        <field name="category_id" ref="module_category_acs_register"/>
+    </record>
+</odoo>

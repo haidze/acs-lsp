@@ -1,0 +1,360 @@
+<odoo>
+    <template id="dashboard_template" name="Dashboard">
+        <t t-call="web.layout">
+            <!-- Thêm Bootstrap CSS -->
+            <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+
+            <!-- Thêm Plotly.js và Chart.js -->
+            <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+            <div class="container-fluid my-3">
+                <!-- Bố cục hàng cho các thẻ đầu tiên với Flexbox -->
+                <div class="row d-flex justify-content-between text-center mb-4">
+                    <!-- Thẻ cho Pre-Registered Visitors -->
+                    <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                                <h5 class="card-title">Pre-Registered Visitors</h5>
+                                <div class="chart-circle">
+                                    <canvas id="pre_registered_chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Thẻ cho Signed-In Visitors -->
+                    <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                                <h5 class="card-title">Signed-In Visitors</h5>
+                                <div class="chart-circle">
+                                    <canvas id="signed_in_chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Thẻ cho Signed-Out Visitors -->
+                    <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                                <h5 class="card-title">Signed-Out Visitors</h5>
+                                <div class="chart-circle">
+                                    <canvas id="signed_out_chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Thẻ cho Cancelled Appointments -->
+                    <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                                <h5 class="card-title">Cancelled Appointments</h5>
+                                <div class="chart-circle">
+                                    <canvas id="cancelled_appointments_chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Thẻ cho Waiting for Approval -->
+                    <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                                <h5 class="card-title">Waiting for Approval</h5>
+                                <div class="chart-circle">
+                                    <canvas id="waiting_for_approval_chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-md-6 d-flex">
+                        <div class="card shadow-sm w-100">
+                            <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                                <h5 class="card-title text-center">Purpose of Visit</h5>
+                                <canvas id="purpose_of_visit_chart" style="width: 100%; max-width: 300px !important; height: 300px !important;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 d-flex">
+                        <div class="card shadow-sm w-100">
+                            <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                                <h5 class="card-title text-center">Working Areas</h5>
+                                <div id="working_areas_chart" style="width:100%;height:400px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Đảm bảo plugin datalabels được đăng ký
+                Chart.register(ChartDataLabels);
+
+                // Lấy dữ liệu từ biến Odoo và phân tích JSON
+                var dashboardData = {
+                    pre_registered_visitors: [[<t t-esc="pre_registered_visitors"/>]],
+                    signed_in_visitors: [[<t t-esc="signed_in_visitors"/>]],
+                    signed_out_visitors: [[<t t-esc="signed_out_visitors"/>]],
+                    cancelled_appointments: [[<t t-esc="cancelled_appointments"/>]],
+                    waiting_for_approval: [[<t t-esc="waiting_for_approval"/>]],
+                    purpose_of_visit_data: <t t-raw="purpose_of_visit_data"/>,
+                    working_areas_data: <t t-raw="working_areas_data"/>
+                };
+
+                function initializeCharts(data) {
+                    // Doughnut Charts với Data Labels
+                    var ctx1 = document.getElementById('pre_registered_chart').getContext('2d');
+                    new Chart(ctx1, {
+                        type: 'doughnut',
+                        data: {
+                            datasets: [{
+                                data: data.pre_registered_visitors,
+                                backgroundColor: ['#42A5F5', '#E0E0E0'],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            cutout: '80%',
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                datalabels: {
+                                    color: '#000',
+                                    font: {
+                                        size: '18',
+                                        weight: 'bold'
+                                    },
+                                    formatter: function(value, ctx) {
+                                        return value; // Hiển thị giá trị ở giữa biểu đồ
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    var ctx2 = document.getElementById('signed_in_chart').getContext('2d');
+                    new Chart(ctx2, {
+                        type: 'doughnut',
+                        data: {
+                            datasets: [{
+                                data: data.signed_in_visitors,
+                                backgroundColor: ['#FFA726', '#E0E0E0'],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            cutout: '80%',
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                datalabels: {
+                                    color: '#000',
+                                    font: {
+                                        size: '18',
+                                        weight: 'bold'
+                                    },
+                                    formatter: function(value, ctx) {
+                                        return value; // Hiển thị giá trị ở giữa biểu đồ
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    var ctx3 = document.getElementById('signed_out_chart').getContext('2d');
+                    new Chart(ctx3, {
+                        type: 'doughnut',
+                        data: {
+                            datasets: [{
+                                data: data.signed_out_visitors,
+                                backgroundColor: ['#66BB6A', '#E0E0E0'],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            cutout: '80%',
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                datalabels: {
+                                    color: '#000',
+                                    font: {
+                                        size: '18',
+                                        weight: 'bold'
+                                    },
+                                    formatter: function(value, ctx) {
+                                        return value; // Hiển thị giá trị ở giữa biểu đồ
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    var ctx4 = document.getElementById('cancelled_appointments_chart').getContext('2d');
+                    new Chart(ctx4, {
+                        type: 'doughnut',
+                        data: {
+                            datasets: [{
+                                data: data.cancelled_appointments,
+                                backgroundColor: ['#EF5350', '#E0E0E0'],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            cutout: '80%',
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                datalabels: {
+                                    color: '#000',
+                                    font: {
+                                        size: '18',
+                                        weight: 'bold'
+                                    },
+                                    formatter: function(value, ctx) {
+                                        return value; // Hiển thị giá trị ở giữa biểu đồ
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    var ctx5 = document.getElementById('waiting_for_approval_chart').getContext('2d');
+                    new Chart(ctx5, {
+                        type: 'doughnut',
+                        data: {
+                            datasets: [{
+                                data: data.waiting_for_approval,
+                                backgroundColor: ['#42A5F5', '#E0E0E0'],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            cutout: '80%',
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                datalabels: {
+                                    color: '#000',
+                                    font: {
+                                        size: '18',
+                                        weight: 'bold'
+                                    },
+                                    formatter: function(value, ctx) {
+                                        return value; // Hiển thị giá trị ở giữa biểu đồ
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    var ctx6 = document.getElementById('purpose_of_visit_chart').getContext('2d');
+                    new Chart(ctx6, {
+                        type: 'pie',
+                        data: {
+                            labels: Object.keys(data.purpose_of_visit_data),
+                            datasets: [{
+                                data: Object.values(data.purpose_of_visit_data),
+                                backgroundColor: ['#FFA726', '#42A5F5'],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: true,
+                            aspectRatio: 1,
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: 'bottom',
+                                    labels: {
+                                        font: {
+                                            size: 14
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            var label = context.label || '';
+                                            var value = context.raw || '';
+                                            return `${label}: ${value}`;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    // Treemap với Plotly
+                    var treemapData = [{
+                        type: "treemap",
+                        labels: Object.keys(data.working_areas_data),
+                        parents: Object.keys(data.working_areas_data).map(() => ""),
+                        values: Object.values(data.working_areas_data),
+                        textinfo: "label+value"
+                    }];
+
+                    Plotly.newPlot('working_areas_chart', treemapData);
+                }
+
+                initializeCharts(dashboardData);
+            });
+        </script>
+
+        <style>
+            .card {
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                margin-bottom: 15px;
+            }
+            .card-body {
+                padding: 20px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+            }
+            .card-title {
+                font-size: 1.1rem;
+                font-weight: bold;
+                color: #333;
+                margin-bottom: 15px;
+            }
+            .chart-circle {
+                width: 120px;
+                height: 120px;
+            }
+            canvas {
+                max-width: 100% !important;
+                height: auto !important; /* Sử dụng auto thay vì fixed height */
+            }
+            .card-text {
+                font-size: 1.5rem;
+                font-weight: bold;
+                color: #555;
+                margin-top: 10px;
+            }
+        </style>
+    </template>
+</odoo>

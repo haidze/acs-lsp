@@ -1,0 +1,56 @@
+<odoo>
+    <record id="view_company_tree" model="ir.ui.view">
+        <field name="name">company.tree</field>
+        <field name="model">company</field>
+        <field name="arch" type="xml">
+            <tree string="Companies">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="tax_code"/>
+                <field name="website"/>
+                <field name="address"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_company_form" model="ir.ui.view">
+        <field name="name">company.form</field>
+        <field name="model">company</field>
+        <field name="arch" type="xml">
+            <form string="Company">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="logo"/>
+                        </group>
+                        <group>
+                            <field name="email"/>
+                            <field name="phone"/>
+                            <field name="address"/>
+                        </group>
+                        <group>
+                            <field name="tax_code"/>
+                            <field name="website"/>
+                        </group>
+                    </group>
+                    <group string="Other Information">
+                        <field name="note" widget="html"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_company" model="ir.actions.act_window">
+        <field name="name">Companies</field>
+        <field name="res_model">company</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first company
+            </p>
+        </field>
+    </record>
+</odoo>

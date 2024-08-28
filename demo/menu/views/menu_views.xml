@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="action_dummy_security_a" model="ir.actions.act_window">
+            <field name="name">Security Officer Dashboard</field>
+            <field name="res_model">ir.ui.view</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_dummy_empty"/>
+        </record>
+        <record id="action_dummy_security_officer_dashboard" model="ir.actions.act_window">
+            <field name="name">Security Officer Dashboard</field>
+            <field name="res_model">ir.ui.view</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_dummy_empty"/>
+        </record>
+        <record id="action_dummy_host_dashboard" model="ir.actions.act_window">
+            <field name="name">Host Dashboard</field>
+            <field name="res_model">ir.ui.view</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_dummy_empty"/>
+        </record>
+        <record id="action_dummy_hsse_manager_dashboard" model="ir.actions.act_window">
+            <field name="name">HSSE Manager Dashboard</field>
+            <field name="res_model">ir.ui.view</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_dummy_empty"/>
+        </record>
+
+        <record id="action_dummy_device_group" model="ir.actions.act_window">
+            <field name="name">Device Group</field>
+            <field name="res_model">ir.ui.view</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_dummy_empty"/>
+        </record>
+        <record id="action_dummy_device_setting" model="ir.actions.act_window">
+            <field name="name">Device Setting</field>
+            <field name="res_model">ir.ui.view</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_dummy_empty"/>
+        </record>
+        <record id="action_dummy_device_monitoring" model="ir.actions.act_window">
+            <field name="name">Device Monitoring</field>
+            <field name="res_model">ir.ui.view</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_dummy_empty"/>
+        </record>
+        <record id="action_dummy_device_issue_type" model="ir.actions.act_window">
+            <field name="name">Device Issue Type</field>
+            <field name="res_model">ir.ui.view</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_dummy_empty"/>
+        </record>
+        <record id="action_dummy_device_information" model="ir.actions.act_window">
+            <field name="name">Device Information</field>
+            <field name="res_model">ir.ui.view</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_dummy_empty"/>
+        </record>
+        <record id="action_dummy_whitelist_control" model="ir.actions.act_window">
+            <field name="name">Whitelist Control</field>
+            <field name="res_model">ir.ui.view</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_dummy_empty"/>
+        </record>
+
+        <record id="action_dummy_visitor_vehicles_control" model="ir.actions.act_window">
+            <field name="name">Visitor Vehicles Control</field>
+            <field name="res_model">ir.ui.view</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_dummy_empty"/>
+        </record>
+        <record id="action_dummy_logistic_vehicles_control" model="ir.actions.act_window">
+            <field name="name">Logistic Vehicles Control</field>
+            <field name="res_model">ir.ui.view</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_dummy_empty"/>
+        </record>
+        <record id="action_dummy_blacklist_control" model="ir.actions.act_window">
+            <field name="name">Blacklist Control</field>
+            <field name="res_model">ir.ui.view</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_dummy_empty"/>
+        </record>
+        <record id="action_dummy_maintenance_vehicles_control" model="ir.actions.act_window">
+            <field name="name">Maintenance Vehicles</field>
+            <field name="res_model">ir.ui.view</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_dummy_empty"/>
+        </record>
+        <record id="action_dummy_access_time_rules" model="ir.actions.act_window">
+            <field name="name">Access Time Rules</field>
+            <field name="res_model">ir.ui.view</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_dummy_empty"/>
+        </record>
+
+
+        <!-- Dummy Actions for Administration Submenu -->
+        <record id="action_dummy_setup" model="ir.actions.act_window">
+            <field name="name">Setup</field>
+            <field name="res_model">ir.ui.view</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_dummy_empty"/>
+        </record>
+        <record id="action_dummy_audit_logs" model="ir.actions.act_window">
+            <field name="name">Audit Logs</field>
+            <field name="res_model">ir.ui.view</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_dummy_empty"/>
+        </record>
+        <record id="action_dummy_configuration" model="ir.actions.act_window">
+            <field name="name">Configuration</field>
+            <field name="res_model">ir.ui.view</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_dummy_empty"/>
+        </record>
+        <record id="action_dummy_log_management" model="ir.actions.act_window">
+            <field name="name">Log Management</field>
+            <field name="res_model">ir.ui.view</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_dummy_empty"/>
+        </record>
+        <record id="action_dummy_integrate" model="ir.actions.act_window">
+            <field name="name">Integrate</field>
+            <field name="res_model">ir.ui.view</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_dummy_empty"/>
+        </record>
+
+
+        <!-- Menu chính -->
+        <menuitem id="menu_main" name="Menu" sequence="1" />
+
+        <!-- Các mục con của Menu -->
+        <menuitem id="menu_dashboard" name="Dashboard" parent="menu_main" sequence="1"/>
+        <menuitem id="menu_device_management" name="Device Management" parent="menu_main" sequence="2"/>
+        <menuitem id="menu_access_control" name="Access Control" parent="menu_main" sequence="3"/>
+        <menuitem id="menu_request_access" name="Request Access" parent="menu_main" sequence="4"/>
+        <menuitem id="menu_master_data" name="Master Data" parent="menu_main" sequence="5"/>
+        <menuitem id="menu_administration" name="Administration" parent="menu_main" sequence="6"/>
+
+        <!-- Submenu con của Dashboard -->
+        <menuitem id="menu_area_owner_dashboard" name="Area Owner Dashboard" parent="menu_dashboard" sequence="1" action="action_dummy_security_a"/>
+        <menuitem id="menu_security_officer_dashboard" name="Security Officer Dashboard" parent="menu_dashboard" sequence="2" action="action_dummy_security_officer_dashboard"/>
+        <menuitem id="menu_host_dashboard" name="Host Dashboard" parent="menu_dashboard" sequence="3" action="action_dummy_host_dashboard"/>
+        <menuitem id="menu_hsse_manager_dashboard" name="HSSE Manager Dashboard" parent="menu_dashboard" sequence="4" action="action_dummy_hsse_manager_dashboard"/>
+
+        <!-- Submenu con của Device Management -->
+        <menuitem id="menu_device_group" name="Device Group" parent="menu_device_management" sequence="1" action="action_dummy_device_group"/>
+        <menuitem id="menu_device_setting" name="Device Setting" parent="menu_device_management" sequence="2" action="action_dummy_device_setting"/>
+        <menuitem id="menu_device_monitoring" name="Device Monitoring" parent="menu_device_management" sequence="3" action="action_dummy_device_monitoring"/>
+        <menuitem id="menu_device_issue_type" name="Device Issue Type" parent="menu_device_management" sequence="4" action="action_dummy_device_issue_type"/>
+        <menuitem id="menu_device_information" name="Device Information" parent="menu_device_management" sequence="5" action="action_dummy_device_information"/>
+
+        <!-- Submenu con của Access Control -->
+        <menuitem id="menu_whitelist_control" name="Whitelist Control" parent="menu_access_control" sequence="1" action="action_dummy_whitelist_control"/>
+        <menuitem id="menu_visitor_vehicles_control" name="Visitor Vehicles Control" parent="menu_access_control" sequence="2" action="action_dummy_visitor_vehicles_control"/>
+        <menuitem id="menu_maintenance_vehicles_control" name="Maintenance Vehicles Control" parent="menu_access_control" sequence="3" action="action_dummy_maintenance_vehicles_control"/>
+        <menuitem id="menu_logistic_vehicles_control" name="Logistic Vehicles Control" parent="menu_access_control" sequence="4" action="action_dummy_logistic_vehicles_control"/>
+        <menuitem id="menu_blacklist_control" name="Blacklist Control" parent="menu_access_control" sequence="5" action="action_dummy_blacklist_control"/>
+        <menuitem id="menu_control_in_out" name="Control In/Out" parent="menu_access_control" sequence="6" action="action_data_control_in_out"/>
+
+        <!-- Submenu con của Request Access -->
+        <menuitem id="submenu_coming_plan" name="Coming Plan" parent="menu_request_access" action="action_coming_plan" sequence="1"/>
+        <menuitem id="submenu_whitelist" name="Whitelist" parent="menu_request_access" action="action_acs_register_whitelist" sequence="2"/>
+        <menuitem id="submenu_maintenance_vehicles" name="Maintenance Vehicles" parent="menu_request_access" action="action_acs_register_maintenance" sequence="3"/>
+        <menuitem id="submenu_visitor_vehicles" name="Visitor Vehicles" parent="menu_request_access" action="action_acs_register_visitor" sequence="4"/>
+
+        <!-- Submenu con của Master Data -->
+        <menuitem id="menu_general" name="General" parent="menu_master_data" sequence="1"/>
+        <menuitem id="menu_location" name="Location" parent="menu_master_data" sequence="2"/>
+
+        <!-- Submenu con của General -->
+        <menuitem id="menu_companies" name="Companies" parent="menu_general" sequence="1" action="action_company"/>
+        <menuitem id="menu_departments" name="Departments" parent="menu_general" sequence="2" action="action_department"/>
+        <menuitem id="menu_job_position" name="Job Position" parent="menu_general" sequence="3" action="action_job_position"/>
+        <menuitem id="menu_transaction_type" name="Transaction Type" parent="menu_general" sequence="4" action="action_res_transaction_type"/>
+        <menuitem id="menu_vehicle_types" name="Vehicle Types" parent="menu_general" sequence="5" action="action_register_vehicle_type"/>
+        <menuitem id="menu_request_reasons" name="Request Reasons" parent="menu_general" sequence="6" action="action_purpose_of_visit"/>
+        <menuitem id="menu_access_time_rules" name="Access Time Rules" parent="menu_general" sequence="7" action="action_dummy_access_time_rules"/>
+        <menuitem id="menu_approve_reasons" name="Approve Reasons" parent="menu_general" sequence="8" action="action_res_approve_reason"/>
+        <menuitem id="menu_reject_reasons" name="Reject Reasons" parent="menu_general" sequence="9" action="action_res_reject_reason"/>
+
+        <!-- Submenu con của Location -->
+        <menuitem id="menu_plants" name="Plants" parent="menu_location" sequence="1" action="action_plant"/>
+        <menuitem id="menu_gates" name="Gates" parent="menu_location" action="action_gate" sequence="2"/>
+        <menuitem id="menu_lane" name="Lane" parent="menu_location" sequence="3" action="action_lane"/>
+        <menuitem id="menu_working_areas" name="Working Areas" parent="menu_location" sequence="4" action="action_building"/>
+
+         <!-- Submenu con của Administration -->
+        <menuitem id="menu_setup" name="Setup" parent="menu_administration" sequence="1" action="action_dummy_setup"/>
+        <menuitem id="menu_audit_logs" name="Audit Logs" parent="menu_administration" sequence="2" action="action_dummy_audit_logs"/>
+        <menuitem id="menu_configuration" name="Configuration" parent="menu_administration" sequence="3" action="action_dummy_configuration"/>
+        <menuitem id="menu_log_management" name="Log Management" parent="menu_administration" sequence="4" action="action_dummy_log_management"/>
+        <menuitem id="menu_integrate" name="Integrate" parent="menu_administration" sequence="5" action="action_dummy_integrate"/>
+    </data>
+</odoo>

@@ -1,0 +1,25 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_coming_plan,access.coming.plan,model_coming_plan,base.group_user,1,1,1,1
+access_acs_register_user,acs.register user,model_acs_register,base.group_user,1,1,1,1
+access_acs_register_approver_user,acs.register.approver user,model_acs_register_approver,base.group_user,1,1,1,1
+access_acs_register_log_user,acs.register.log user,model_acs_register_log,base.group_user,1,1,1,1
+access_acs_register_approver,acs.register approver,model_acs_register,group_acs_register_approver,1,1,1,1
+access_vehicle_list_user,vehicle.list user,model_vehicle_list,base.group_user,1,1,1,1
+access_vehicle_list_approver,vehicle.list approver,model_vehicle_list,group_acs_register_approver,1,1,1,1
+access_person_list_user,person.list user,model_person_list,base.group_user,1,1,1,1
+access_person_list_approver,person.list approver,model_person_list,group_acs_register_approver,1,1,1,1
+access_reject_reason_wizard,reject.reason.wizard user,model_reject_reason_wizard,base.group_user,1,1,1,1
+access_gate_user,gate user,model_gate,base.group_user,1,1,1,1
+access_lane_user,lane user,model_lane,base.group_user,1,1,1,1
+access_plant_user,plant user,model_plant,base.group_user,1,1,1,1
+access_building_user,building user,model_building,base.group_user,1,1,1,1
+access_company_user,company user,model_company,base.group_user,1,1,1,1
+access_department,access.department,model_department,base.group_user,1,1,1,1
+access_job_position_user,job.position user,model_job_position,base.group_user,1,1,1,1
+access_register_vehicle_type_user,register.vehicle.type user,model_register_vehicle_type,base.group_user,1,1,1,1
+access_purpose_of_visit_user,purpose.of.visit user,model_purpose_of_visit,base.group_user,1,1,1,1
+access_control_in_out_user,control.in.out user,model_control_in_out,base.group_user,1,1,1,1
+access_transaction,access_transaction,model_transaction,base.group_user,1,0,0,0
+access_res_transaction_type_user,res.transaction.type user,model_res_transaction_type,base.group_user,1,1,1,1
+access_res_reason_user,res.reason user,model_res_reason,base.group_user,1,1,1,1
+access_transaction_user,transaction user,model_transaction,base.group_user,1,1,1,1

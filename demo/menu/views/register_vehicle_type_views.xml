@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Action -->
+        <record id="action_register_vehicle_type" model="ir.actions.act_window">
+            <field name="name">Register Vehicle Types</field>
+            <field name="res_model">register.vehicle.type</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Tree View -->
+        <record id="view_register_vehicle_type_tree" model="ir.ui.view">
+            <field name="name">register.vehicle.type.tree</field>
+            <field name="model">register.vehicle.type</field>
+            <field name="arch" type="xml">
+                <tree string="Register Vehicle Types">
+                    <field name="code"/>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form View -->
+        <record id="view_register_vehicle_type_form" model="ir.ui.view">
+            <field name="name">register.vehicle.type.form</field>
+            <field name="model">register.vehicle.type</field>
+            <field name="arch" type="xml">
+                <form string="Register Vehicle Types">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="code"/>
+                                <field name="name"/>
+                            </group>
+                        </group>
+                        <group string="OTHER INFORMATION">
+                            <field name="note" widget="html"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

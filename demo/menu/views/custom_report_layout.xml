@@ -1,0 +1,12 @@
+<odoo>
+    <template id="custom_report_layout">
+        <t t-call="web.basic_layout">
+            <div class="page">
+                <t t-raw="0"/>
+                <main>
+                    <t t-raw="main_content"/>
+                </main>
+            </div>
+        </t>
+    </template>
+</odoo>

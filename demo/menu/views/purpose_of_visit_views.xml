@@ -1,0 +1,44 @@
+<odoo>
+    <record id="view_purpose_of_visit_tree" model="ir.ui.view">
+        <field name="name">purpose.of.visit.tree</field>
+        <field name="model">purpose.of.visit</field>
+        <field name="arch" type="xml">
+            <tree string="Purpose of Visit">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="type"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_purpose_of_visit_form" model="ir.ui.view">
+        <field name="name">purpose.of.visit.form</field>
+        <field name="model">purpose.of.visit</field>
+        <field name="arch" type="xml">
+            <form string="Purpose of Visit">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="type"/>
+                        </group>
+                    </group>
+                    <group string="OTHER INFORMATION">
+                        <field name="note" widget="html"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_purpose_of_visit" model="ir.actions.act_window">
+        <field name="name">Purpose of Visit</field>
+        <field name="res_model">purpose.of.visit</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first lane
+            </p>
+        </field>
+    </record>
+</odoo>

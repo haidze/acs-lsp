@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Empty View -->
+        <record id="view_dummy_empty" model="ir.ui.view">
+            <field name="name">dummy.empty.view</field>
+            <field name="model">ir.ui.view</field>
+            <field name="arch" type="xml">
+                <form string="Dummy Empty View">
+                    <group>
+                        <field name="name" invisible="1"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

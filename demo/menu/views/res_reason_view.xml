@@ -1,0 +1,92 @@
+<odoo>
+    <!-- Tree View cho Approve Reasons -->
+    <record id="view_res_approve_reason_tree" model="ir.ui.view">
+        <field name="name">res.approve.reason.tree</field>
+        <field name="model">res.reason</field>
+        <field name="arch" type="xml">
+            <tree string="Approve Reasons">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="type"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View cho Approve Reasons -->
+    <record id="view_res_approve_reason_form" model="ir.ui.view">
+        <field name="name">res.approve.reason.form</field>
+        <field name="model">res.reason</field>
+        <field name="arch" type="xml">
+            <form string="Approve Reasons">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="type"/>
+                        </group>
+                    </group>
+                    <group string="OTHER INFORMATION">
+                        <field name="note" widget="html"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View cho Reject Reasons -->
+    <record id="view_res_reject_reason_tree" model="ir.ui.view">
+        <field name="name">res.reject.reason.tree</field>
+        <field name="model">res.reason</field>
+        <field name="arch" type="xml">
+            <tree string="Reject Reasons">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="type"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View cho Reject Reasons -->
+    <record id="view_res_reject_reason_form" model="ir.ui.view">
+        <field name="name">res.reject.reason.form</field>
+        <field name="model">res.reason</field>
+        <field name="arch" type="xml">
+            <form string="Reject Reasons">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="type"/>
+                        </group>
+                    </group>
+                    <group string="OTHER INFORMATION">
+                        <field name="note" widget="html"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action và Menu cho Approve Reasons -->
+    <record id="action_res_approve_reason" model="ir.actions.act_window">
+        <field name="name">Approve Reasons</field>
+        <field name="res_model">res.reason</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_res_approve_reason_tree"/>
+        <field name="context">{'default_type': 1}</field>
+        <field name="domain">[('type', '=', '1')]</field>
+    </record>
+
+    <!-- Action và Menu cho Reject Reasons -->
+    <record id="action_res_reject_reason" model="ir.actions.act_window">
+        <field name="name">Reject Reasons</field>
+        <field name="res_model">res.reason</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_res_reject_reason_tree"/>
+        <field name="context">{'default_type': 2}</field>
+        <field name="domain">[('type', '=', '2')]</field>
+    </record>
+
+</odoo>

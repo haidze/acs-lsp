@@ -1,0 +1,11 @@
+<odoo>
+    <report
+        id="action_report_acs_register"
+        model="acs.register"
+        string="Visitor Registration Form"
+        report_type="qweb-pdf"
+        name="menu.report_acs_register"
+        file="menu.report_acs_register"
+        print_report_name="'Visitor Registration Form - %s' % (object.visitor_name)"
+    />
+</odoo>

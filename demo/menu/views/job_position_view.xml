@@ -1,0 +1,45 @@
+<odoo>
+    <!-- Tree View -->
+    <record id="view_job_position_tree" model="ir.ui.view">
+        <field name="name">job.position.tree</field>
+        <field name="model">job.position</field>
+        <field name="arch" type="xml">
+            <tree string="Job Position">
+                <field name="code"/>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+     <!-- Form View -->
+    <record id="view_job_position_form" model="ir.ui.view">
+        <field name="name">job.position.form</field>
+        <field name="model">job.position</field>
+        <field name="arch" type="xml">
+            <form string="Job Position">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                    <group string="OTHER INFORMATION">
+                        <field name="note" widget="html"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_job_position" model="ir.actions.act_window">
+        <field name="name">Job Position</field>
+        <field name="res_model">job.position</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new department.
+            </p>
+        </field>
+    </record>
+</odoo>

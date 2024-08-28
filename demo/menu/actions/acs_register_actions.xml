@@ -1,0 +1,10 @@
+<odoo>
+     <record id="action_acs_register_visitor" model="ir.actions.act_window">
+        <field name="name">Visitor Vehicles Request</field>
+        <field name="res_model">acs.register</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_acs_register_tree_visitor"/>
+        <field name="domain">[('vehicle_type_id.code', '=', 'V')]</field>
+        <field name="context">{'default_vehicle_type_id': 4}</field>
+    </record>
+</odoo>

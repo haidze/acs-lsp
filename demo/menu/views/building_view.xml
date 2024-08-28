@@ -1,0 +1,60 @@
+<odoo>
+    <record id="view_building_tree" model="ir.ui.view">
+        <field name="name">building.tree</field>
+        <field name="model">building</field>
+        <field name="arch" type="xml">
+            <tree string="Buildings">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="longitude"/>
+                <field name="latitude"/>
+                <field name="plant_id"/>
+                <field name="approve_by"/>
+                <field name="manager_id"/>
+                <field name="sequence"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_building_form" model="ir.ui.view">
+        <field name="name">building.form</field>
+        <field name="model">building</field>
+        <field name="arch" type="xml">
+            <form string="Building">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="longitude"/>
+                            <field name="latitude"/>
+                            <field name="plant_id"/>
+                        </group>
+                    </group>
+                    <group string="APPROVAL">
+                        <field name="approve_by"/>
+                        <field name="manager_id"/>
+                        <field name="sequence"/>
+                    </group>
+                    <group string="GATE INFORMATION">
+                        <field name="gate_ids" widget="many2many_tags"/>
+                    </group>
+                    <group string="OTHER INFORMATION">
+                        <field name="note" widget="html"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_building" model="ir.actions.act_window">
+        <field name="name">Buildings</field>
+        <field name="res_model">building</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first building
+            </p>
+        </field>
+    </record>
+</odoo>

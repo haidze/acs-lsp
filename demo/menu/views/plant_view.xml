@@ -1,0 +1,49 @@
+<odoo>
+    <record id="view_plant_tree" model="ir.ui.view">
+        <field name="name">plant.tree</field>
+        <field name="model">plant</field>
+        <field name="arch" type="xml">
+            <tree string="Plants">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="company"/>
+                <field name="phone"/>
+                <field name="address"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_plant_form" model="ir.ui.view">
+        <field name="name">plant.form</field>
+        <field name="model">plant</field>
+        <field name="arch" type="xml">
+            <form string="Plant">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="company"/>
+                            <field name="phone"/>
+                            <field name="address"/>
+                        </group>
+                    </group>
+                    <group string="OTHER INFORMATION">
+                        <field name="note" widget="html"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_plant" model="ir.actions.act_window">
+        <field name="name">Plants</field>
+        <field name="res_model">plant</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first plant
+            </p>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,60 @@
+<odoo>
+    <!-- Tree View for Data Control In Out -->
+    <record id="view_data_control_in_out_tree" model="ir.ui.view">
+        <field name="name">data.control.in.out.tree</field>
+        <field name="model">control.in.out</field>
+        <field name="arch" type="xml">
+            <tree string="Data Control In Out">
+                <field name="vehicle_plate_number"/>
+                <field name="record_date"/>
+                <field name="gate_id"/>
+                <field name="lane_id"/>
+                <field name="message_en"/>
+                <field name="message_vn"/>
+                <field name="status"/>
+                <field name="register_id"/>
+                <field name="reason"/>
+                <field name="coming_plan_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for Data Control In Out -->
+    <record id="view_data_control_in_out_form" model="ir.ui.view">
+        <field name="name">data.control.in.out.form</field>
+        <field name="model">control.in.out</field>
+        <field name="arch" type="xml">
+            <form string="Data Control In Out">
+                <sheet>
+                    <group>
+                        <field name="id" readonly="1"/>
+                        <field name="vehicle_plate_number"/>
+                        <field name="record_date"/>
+                        <field name="gate_id"/>
+                        <field name="lane_id"/>
+                    </group>
+                    <group>
+                        <field name="message_en"/>
+                        <field name="message_vn"/>
+                    </group>
+                    <group>
+                        <field name="status"/>
+                        <field name="register_id"/>
+                        <field name="reason"/>
+                        <field name="coming_plan_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_data_control_in_out" model="ir.actions.act_window">
+        <field name="name">Data Control In Out</field>
+        <field name="res_model">control.in.out</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first control in out
+            </p>
+        </field>
+    </record>
+</odoo>

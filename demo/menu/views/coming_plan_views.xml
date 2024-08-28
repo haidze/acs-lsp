@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Action for Coming Plan -->
+        <record id="action_coming_plan" model="ir.actions.act_window">
+            <field name="name">Coming Plan</field>
+            <field name="res_model">coming.plan</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Tree View -->
+        <record id="view_coming_plan_tree" model="ir.ui.view">
+            <field name="name">coming.plan.tree</field>
+            <field name="model">coming.plan</field>
+            <field name="arch" type="xml">
+                <tree string="Coming Plan">
+                    <field name="register_id" string="Access pass"/>
+                    <field name="vehicle_plate_number" string="Vehicle Plate"/>
+                    <field name="driver_name" string="Driver Name"/>
+                    <field name="gates" string="Gate" widget="many2many_tags"/>
+                    <field name="access_start_date" string="Start Date"/>
+                    <field name="access_end_date" string="End Date"/>
+                    <field name="access_time" string="Access Time"/>
+                    <field name="transaction_type_id" string="Transaction Type"/>
+                    <field name="coming_plan_status" string="Coming Plan Status"/>
+                    <field name="vehicle_status" string="Vehicle Status"/>
+
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form View -->
+        <record id="view_coming_plan_form" model="ir.ui.view">
+            <field name="name">coming.plan.form</field>
+            <field name="model">coming.plan</field>
+            <field name="arch" type="xml">
+                <form string="Coming Plan">
+                    <sheet>
+                        <group>
+                            <field name="register_id"/>
+                            <field name="register_code"/>
+                            <field name="access_pass_number"/>
+                            <field name="vehicle_plate_number"/>
+                            <field name="driver_name"/>
+                            <field name="driver_identity_card" string="Driver Identity Card"/>
+                            <field name="transaction_type_id" string="Transaction Type"/>
+                            <field name="access_start_date"/>
+                            <field name="access_end_date"/>
+                            <field name="access_start_time"/>
+                            <field name="gates" widget="many2many_tags"/>
+                            <field name="working_areas" widget="many2many_tags"/>
+                            <field name="access_end_time"/>
+                            <field name="coming_plan_status"/>
+                            <field name="vehicle_status"/>
+                            <field name="process_type"/>
+                        </group>
+                        <footer>
+                            <button name="action_checked" string="Checked" type="object" class="btn-primary"/>
+                            <button name="action_rejected" string="Rejected" type="object" class="btn-warning"/>
+                            <button name="action_terminated" string="Terminated" type="object" class="btn-danger"/>
+                            <button name="action_close" string="Close" type="object" class="btn-secondary"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

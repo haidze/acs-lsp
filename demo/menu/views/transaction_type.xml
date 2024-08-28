@@ -1,0 +1,44 @@
+<odoo>
+    <!-- Tree View -->
+    <record id="view_res_transaction_type_tree" model="ir.ui.view">
+        <field name="name">res.transaction.type.tree</field>
+        <field name="model">res.transaction.type</field>
+        <field name="arch" type="xml">
+            <tree string="Transaction Type">
+                <field name="code"/>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+     <!-- Form View -->
+    <record id="view_res_transaction_type_form" model="ir.ui.view">
+        <field name="name">res.transaction.type.form</field>
+        <field name="model">res.transaction.type</field>
+        <field name="arch" type="xml">
+            <form string="Transaction Type">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                    <group string="OTHER INFORMATION">
+                        <field name="note" widget="html"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_res_transaction_type" model="ir.actions.act_window">
+        <field name="name">Transaction Types</field>
+        <field name="res_model">res.transaction.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new department.
+            </p>
+        </field>
+    </record>
+</odoo>
